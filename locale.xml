@@ -160,6 +160,14 @@
             <de><![CDATA[Events loggen]]></de>
             <en><![CDATA[Log events]]></en>
         </locale>
+        <locale name="settings.logSystemUser.text">
+            <de><![CDATA[Aktionen des Systembenutzers loggen]]></de>
+            <en><![CDATA[Log system user actions]]></en>
+        </locale>
+        <locale name="settings.logSystemUser.description">
+            <de><![CDATA[Kann sehr viele Protokolleinträge erzeugen und den Speicherbedarf erheblich erhöhen.]]></de>
+            <en><![CDATA[Can create a large number of log entries and significantly increase storage usage.]]></en>
+        </locale>
 
         <!-- messages -->
 

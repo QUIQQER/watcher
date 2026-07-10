@@ -71,7 +71,7 @@ class Watcher
 
         QUI::getDataBaseConnection()->insert(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher')), [
             'message' => $message,
-            'call' => $call,
+            QUI\Utils\Doctrine::quoteIdentifier('call') => $call,
             'callParams' => json_encode($callParams),
             'uid' => QUI::getUserBySession()->getUUID(),
             'statusTime' => date('Y-m-d H:i:s')
@@ -103,7 +103,7 @@ class Watcher
             'localeGroup' => $localeGroup,
             'localeVar' => $localeVar,
             'localeParams' => json_encode($localeParams),
-            'call' => $call,
+            QUI\Utils\Doctrine::quoteIdentifier('call') => $call,
             'callParams' => json_encode($callParams),
             'uid' => QUI::getUserBySession()->getUUID(),
             'statusTime' => date('Y-m-d H:i:s')
@@ -125,8 +125,10 @@ class Watcher
         $User = QUI::getUserBySession();
         $uid = $User->getUUID();
 
-        // TODO: turn this into a setting (see quiqqer/package-watcher#8)
-        if (QUI::getUsers()->isSystemUser($User)) {
+        if (
+            QUI::getUsers()->isSystemUser($User)
+            && !QUI::getPackage('quiqqer/watcher')->getConfig()?->getValue('settings', 'logSystemUser')
+        ) {
             return false;
         }
 

@@ -5,7 +5,9 @@ namespace QUI\Watcher\Tests;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use QUI;
+use QUI\Interfaces\Users\User as UserInterface;
 use QUI\Watcher;
+use ReflectionProperty;
 use Throwable;
 
 class WatcherDbalIntegrationTest extends TestCase
@@ -99,6 +101,48 @@ class WatcherDbalIntegrationTest extends TestCase
         $this->assertSame('unknown', $result['data'][0]['username']);
     }
 
+    public function testSystemUserLoggingCanBeEnabledExplicitly(): void
+    {
+        $Config = QUI::getPackage('quiqqer/watcher')->getConfig();
+
+        if ($Config === null) {
+            $this->markTestSkipped('Watcher configuration is not available.');
+        }
+
+        $hadLogSystemUser = $Config->existValue('settings', 'logSystemUser');
+        $originalLogSystemUser = $Config->getValue('settings', 'logSystemUser');
+        $hadUsersAndGroups = $Config->existValue('settings', 'users_and_groups');
+        $originalUsersAndGroups = $Config->getValue('settings', 'users_and_groups');
+        $PreviousUser = self::replaceSessionUser(QUI::getUsers()->getSystemUser());
+        $message = self::TEST_PREFIX . uniqid();
+
+        try {
+            $Config->setValue('settings', 'users_and_groups', '');
+            $Config->del('settings', 'logSystemUser');
+            self::resetWatcherState();
+
+            Watcher::addString($message, 'phpunit');
+            $this->assertSame(0, self::countMessages($message));
+
+            $Config->setValue('settings', 'logSystemUser', 0);
+            self::resetWatcherState();
+
+            Watcher::addString($message, 'phpunit');
+            $this->assertSame(0, self::countMessages($message));
+
+            $Config->setValue('settings', 'logSystemUser', 1);
+            self::resetWatcherState();
+
+            Watcher::addString($message, 'phpunit');
+            $this->assertSame(1, self::countMessages($message));
+        } finally {
+            self::restoreConfigValue($Config, 'logSystemUser', $hadLogSystemUser, $originalLogSystemUser);
+            self::restoreConfigValue($Config, 'users_and_groups', $hadUsersAndGroups, $originalUsersAndGroups);
+            self::replaceSessionUser($PreviousUser);
+            self::resetWatcherState();
+        }
+    }
+
     private function insertFixture(string $uid, string $message, string $statusTime): void
     {
         self::getConnection()->insert(self::getTable(), [
@@ -127,11 +171,14 @@ class WatcherDbalIntegrationTest extends TestCase
         try {
             $Connection = self::getConnection();
             $uid = $Connection->getDatabasePlatform()->quoteSingleIdentifier('uid');
+            $message = $Connection->getDatabasePlatform()->quoteSingleIdentifier('message');
 
             $Connection->createQueryBuilder()
                 ->delete(self::getTable())
                 ->where($uid . ' LIKE :uid')
+                ->orWhere($message . ' LIKE :message')
                 ->setParameter('uid', self::TEST_PREFIX . '%')
+                ->setParameter('message', self::TEST_PREFIX . '%')
                 ->executeStatement();
         } catch (Throwable) {
             // The availability check reports DB problems. Cleanup should not hide the test result.
@@ -146,5 +193,60 @@ class WatcherDbalIntegrationTest extends TestCase
     private static function getTable(): string
     {
         return QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher'));
+    }
+
+    private static function countMessages(string $message): int
+    {
+        $QueryBuilder = self::getConnection()->createQueryBuilder();
+        $count = $QueryBuilder
+            ->select('COUNT(*)')
+            ->from(self::getTable())
+            ->where($QueryBuilder->expr()->eq('message', ':message'))
+            ->setParameter('message', $message)
+            ->executeQuery()
+            ->fetchOne();
+
+        return is_numeric($count) ? (int)$count : 0;
+    }
+
+    private static function replaceSessionUser(UserInterface $User): UserInterface
+    {
+        $Users = QUI::getUsers();
+        $Property = new ReflectionProperty($Users, 'Session');
+        $Property->setAccessible(true);
+
+        $PreviousUser = $Property->getValue($Users);
+        $Property->setValue($Users, $User);
+
+        return $PreviousUser instanceof UserInterface ? $PreviousUser : QUI::getUsers()->getNobody();
+    }
+
+    private static function resetWatcherState(): void
+    {
+        foreach (['groups' => null, 'users' => null, 'checked' => []] as $property => $value) {
+            $Property = new ReflectionProperty(Watcher::class, $property);
+            $Property->setValue(null, $value);
+        }
+    }
+
+    private static function restoreConfigValue(
+        QUI\Config $Config,
+        string $key,
+        bool $existed,
+        mixed $value
+    ): void {
+        if (!$existed) {
+            $Config->del('settings', $key);
+            return;
+        }
+
+        if (is_bool($value)) {
+            $Config->setValue('settings', $key, (int)$value);
+            return;
+        }
+
+        if (is_int($value) || is_float($value) || is_string($value)) {
+            $Config->setValue('settings', $key, $value);
+        }
     }
 }
