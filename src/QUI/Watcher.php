@@ -35,21 +35,21 @@ class Watcher
     /**
      * list of group ids
      *
-     * @var array|null
+     * @var array<int|string, true>|null
      */
     protected static ?array $groups = null;
 
     /**
      * list of group ids
      *
-     * @var array|null
+     * @var array<int|string, true>|null
      */
     protected static ?array $users = null;
 
     /**
      * list of checked users
      *
-     * @var array
+     * @var array<int|string, bool>
      */
     protected static array $checked = [];
 
@@ -58,7 +58,7 @@ class Watcher
      *
      * @param string $message - Message
      * @param string $call - php call, eq: ajax function or event name
-     * @param array $callParams - optional, call parameter
+     * @param array<array-key, mixed> $callParams - optional, call parameter
      * @throws Exception|QUI\Exception
      */
     public static function addString(string $message = '', string $call = '', array $callParams = []): void
@@ -86,8 +86,8 @@ class Watcher
      * @param string $localeGroup - locale group
      * @param string $localeVar - locale variable
      * @param string $call - php call, eq: ajax function or event name
-     * @param array $callParams - optional, call parameter
-     * @param array $localeParams - optional, locale parameter
+     * @param array<array-key, mixed> $callParams - optional, call parameter
+     * @param array<array-key, mixed> $localeParams - optional, locale parameter
      * @throws QUI\Exception
      */
     public static function add(
@@ -138,11 +138,19 @@ class Watcher
 
 
         if (!is_array(self::$groups) || !is_array(self::$users)) {
-            $ugs = QUI\Utils\UserGroups::parseUsersGroupsString(
-                QUI::getPackage('quiqqer/watcher')
-                    ->getConfig()
-                    ->getValue('settings', 'users_and_groups')
-            );
+            $Config = QUI::getPackage('quiqqer/watcher')->getConfig();
+
+            if ($Config === null) {
+                return false;
+            }
+
+            $usersAndGroups = $Config->getValue('settings', 'users_and_groups');
+
+            if (!is_string($usersAndGroups)) {
+                $usersAndGroups = '';
+            }
+
+            $ugs = QUI\Utils\UserGroups::parseUsersGroupsString($usersAndGroups);
 
             foreach ($ugs['groups'] as $_gid) {
                 self::$groups[$_gid] = true;
@@ -427,6 +435,10 @@ class Watcher
 
             $watchList = $Path->query("//quiqqer/watch");
             $table = QUI::getDBTableName('watcherEvents');
+
+            if ($watchList === false) {
+                continue;
+            }
 
             // clear watches of package
             QUI::getDataBase()->delete($table, [

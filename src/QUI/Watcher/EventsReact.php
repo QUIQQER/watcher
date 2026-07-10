@@ -27,14 +27,14 @@ use function json_encode;
 class EventsReact
 {
     /**
-     * @var array|null
+     * @var array<string, array<string, list<array<string, mixed>>>>|null
      */
     protected static ?array $watcherEvents = null;
 
     /**
      *
      * @param string $event
-     * @param array $arguments
+     * @param array<array-key, mixed> $arguments
      * @throws Exception
      */
     public static function trigger(string $event, array $arguments = []): void
@@ -73,6 +73,10 @@ class EventsReact
         }
 
         $Config = QUI::getPackage('quiqqer/watcher')->getConfig();
+
+        if ($Config === null) {
+            return;
+        }
 
         if (!$Config->getValue('settings', 'logEvents')) {
             return;
@@ -147,14 +151,18 @@ class EventsReact
     /**
      * event on ajax call - React at ajax events
      *
-     * @param string|array $function
-     * @param string $result
-     * @param array $params
+     * @param string|array<array-key, mixed> $function
+     * @param string|array<array-key, mixed> $result
+     * @param array<array-key, mixed> $params
      * @throws Exception
      */
     public static function onAjaxCall(string|array $function, string|array $result, array $params): void
     {
         $Config = QUI::getPackage('quiqqer/watcher')->getConfig();
+
+        if ($Config === null) {
+            return;
+        }
 
         if (!$Config->getValue('settings', 'logAjax')) {
             return;
@@ -203,6 +211,10 @@ class EventsReact
     public static function onHeaderLoaded(): void
     {
         $Config = QUI::getPackage('quiqqer/watcher')->getConfig();
+
+        if ($Config === null) {
+            return;
+        }
 
         if (!$Config->getValue('settings', 'logEvents')) {
             return;
@@ -322,7 +334,7 @@ class EventsReact
      * event onProjectConfigSave
      *
      * @param string $project
-     * @param array $config
+     * @param array<string, mixed> $config
      * @throws Exception
      */
     public static function onProjectConfigSave(string $project, array $config): void
@@ -619,7 +631,7 @@ class EventsReact
     /**
      * Return the global watch events -> from watch.xml's
      *
-     * @return array|null
+     * @return array<string, array<string, list<array<string, mixed>>>>|null
      */
     protected static function getWatchEvents(): ?array
     {
@@ -669,7 +681,7 @@ class EventsReact
         foreach ($result as $entry) {
             $uid = $entry['uid'];
 
-            if (!is_numeric($uid)) {
+            if ((!is_int($uid) && !is_string($uid)) || !is_numeric($uid)) {
                 continue;
             }
 

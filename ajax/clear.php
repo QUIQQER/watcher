@@ -9,7 +9,7 @@
  *
  * @return array
  */
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_watcher_ajax_clear',
     function ($date) {
         QUI\Watcher::clear($date);

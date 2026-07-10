@@ -2,6 +2,7 @@
 
 namespace QUI\Watcher;
 
+use DateTimeImmutable;
 use QUI\Exception;
 use QUI\Watcher;
 
@@ -15,16 +16,19 @@ class Cron
     /**
      * Delete all watcher entries older than X days
      *
-     * @param array $params
+     * @param array{days?: int|string} $params
      * @throws Exception
      */
     public static function clearWatcherEntries(array $params): void
     {
-        if (empty($params['days'])) {
-            $params['days'] = 3;
+        $days = $params['days'] ?? 3;
+
+        if (!is_numeric($days)) {
+            $days = 3;
         }
 
-        $DeleteOlderThanDate = date_create('-' . $params['days'] . ' day');
+        $days = max(0, (int)$days);
+        $DeleteOlderThanDate = new DateTimeImmutable('-' . $days . ' days');
         Watcher::clear($DeleteOlderThanDate->format('Y-m-d'));
     }
 }
