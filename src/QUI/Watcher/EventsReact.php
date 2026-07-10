@@ -132,8 +132,8 @@ class EventsReact
             if (is_callable($exec)) {
                 try {
                     $str = call_user_func_array($exec, [
-                        'event' => $event,
-                        'params' => $arguments
+                        $event,
+                        $arguments
                     ]);
 
                     QUI\Watcher::addString($str, $event, $arguments);
@@ -184,9 +184,9 @@ class EventsReact
             if (is_callable($exec)) {
                 try {
                     $str = call_user_func_array($exec, [
-                        'ajax' => $function,
-                        'params' => $params,
-                        'result' => $result
+                        $function,
+                        $params,
+                        $result
                     ]);
 
                     QUI\Watcher::addString($str, $function, $params);
@@ -227,8 +227,8 @@ class EventsReact
 
                     try {
                         $str = call_user_func_array($exec, [
-                            'event' => $eventData['event'],
-                            'params' => func_get_args()
+                            $eventData['event'],
+                            func_get_args()
                         ]);
 
                         QUI\Watcher::addString($str, $eventData['event']);
