@@ -3,29 +3,29 @@
 
     <global>
         <table name="watcher" no-site-reference="1" no-auto-update="1">
-            <field type="INT(11) NOT NULL">id</field>
-            <field type="MEDIUMTEXT NULL DEFAULT NULL">message</field>
-            <field type="VARCHAR(255) NULL DEFAULT NULL">localeGroup</field>
-            <field type="VARCHAR(255) NULL DEFAULT NULL">localeVar</field>
-            <field type="TEXT NULL DEFAULT NULL">localeParams</field>
-            <field type="VARCHAR(50) NOT NULL">uid</field>
-            <field type="DATETIME NULL DEFAULT NULL">statusTime</field>
-            <field type="VARCHAR(255) NULL DEFAULT NULL">call</field>
-            <field type="MEDIUMTEXT NULL DEFAULT NULL">callParams</field>
+            <field type="bigint" autoincrement="true" primary="true">id</field>
+            <field type="text" nullable="true" default="null">message</field>
+            <field type="string" length="255" nullable="true" default="null">localeGroup</field>
+            <field type="string" length="255" nullable="true" default="null">localeVar</field>
+            <field type="text" nullable="true" default="null">localeParams</field>
+            <field type="string" length="50">uid</field>
+            <field type="datetime" nullable="true" default="null">statusTime</field>
+            <field type="string" length="255" nullable="true" default="null">call</field>
+            <field type="text" nullable="true" default="null">callParams</field>
 
-            <primary>id</primary>
-            <auto_increment>id</auto_increment>
+            <index>uid</index>
+            <index>statusTime</index>
+            <index>uid,statusTime</index>
         </table>
 
         <table name="watcherEvents" no-site-reference="1" no-auto-update="1">
-            <field type="INT(11) NOT NULL">id</field>
-            <field type="VARCHAR(255) NULL DEFAULT NULL">package</field>
-            <field type="VARCHAR(255) NULL DEFAULT NULL">ajax</field>
-            <field type="VARCHAR(255) NULL DEFAULT NULL">event</field>
-            <field type="TEXT NULL DEFAULT NULL">exec</field>
+            <field type="bigint" autoincrement="true" primary="true">id</field>
+            <field type="string" length="255" nullable="true" default="null">package</field>
+            <field type="string" length="255" nullable="true" default="null">ajax</field>
+            <field type="string" length="255" nullable="true" default="null">event</field>
+            <field type="text" nullable="true" default="null">exec</field>
 
-            <primary>id</primary>
-            <auto_increment>id</auto_increment>
+            <index>package</index>
         </table>
     </global>
 

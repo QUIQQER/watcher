@@ -14,6 +14,9 @@
                 <conf name="logEvents">
                     <type><![CDATA[bool]]></type>
                 </conf>
+                <conf name="logSystemUser">
+                    <type><![CDATA[bool]]></type>
+                </conf>
             </section>
         </config>
 
@@ -52,6 +55,14 @@
                             <text>
                                 <locale group="quiqqer/watcher" var="settings.logEvents.text" />
                             </text>
+                        </input>
+                        <input conf="settings.logSystemUser" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/watcher" var="settings.logSystemUser.text" />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/watcher" var="settings.logSystemUser.description" />
+                            </description>
                         </input>
                     </settings>
                 </category>
