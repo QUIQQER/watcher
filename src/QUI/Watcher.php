@@ -8,8 +8,6 @@ namespace QUI;
 
 use DOMElement;
 use DOMXPath;
-use PDO;
-use PDOException;
 use QUI;
 use QUI\Database\Exception;
 use QUI\Groups\Group;
@@ -35,21 +33,21 @@ class Watcher
     /**
      * list of group ids
      *
-     * @var array|null
+     * @var array<int|string, true>|null
      */
     protected static ?array $groups = null;
 
     /**
      * list of group ids
      *
-     * @var array|null
+     * @var array<int|string, true>|null
      */
     protected static ?array $users = null;
 
     /**
      * list of checked users
      *
-     * @var array
+     * @var array<int|string, bool>
      */
     protected static array $checked = [];
 
@@ -58,7 +56,7 @@ class Watcher
      *
      * @param string $message - Message
      * @param string $call - php call, eq: ajax function or event name
-     * @param array $callParams - optional, call parameter
+     * @param array<array-key, mixed> $callParams - optional, call parameter
      * @throws Exception|QUI\Exception
      */
     public static function addString(string $message = '', string $call = '', array $callParams = []): void
@@ -71,9 +69,9 @@ class Watcher
             return;
         }
 
-        QUI::getDataBase()->insert(QUI::getDBTableName('watcher'), [
+        QUI::getDataBaseConnection()->insert(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher')), [
             'message' => $message,
-            'call' => $call,
+            QUI\Utils\Doctrine::quoteIdentifier('call') => $call,
             'callParams' => json_encode($callParams),
             'uid' => QUI::getUserBySession()->getUUID(),
             'statusTime' => date('Y-m-d H:i:s')
@@ -86,8 +84,8 @@ class Watcher
      * @param string $localeGroup - locale group
      * @param string $localeVar - locale variable
      * @param string $call - php call, eq: ajax function or event name
-     * @param array $callParams - optional, call parameter
-     * @param array $localeParams - optional, locale parameter
+     * @param array<array-key, mixed> $callParams - optional, call parameter
+     * @param array<array-key, mixed> $localeParams - optional, locale parameter
      * @throws QUI\Exception
      */
     public static function add(
@@ -101,11 +99,11 @@ class Watcher
             return;
         }
 
-        QUI::getDataBase()->insert(QUI::getDBTableName('watcher'), [
+        QUI::getDataBaseConnection()->insert(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher')), [
             'localeGroup' => $localeGroup,
             'localeVar' => $localeVar,
             'localeParams' => json_encode($localeParams),
-            'call' => $call,
+            QUI\Utils\Doctrine::quoteIdentifier('call') => $call,
             'callParams' => json_encode($callParams),
             'uid' => QUI::getUserBySession()->getUUID(),
             'statusTime' => date('Y-m-d H:i:s')
@@ -127,17 +125,28 @@ class Watcher
         $User = QUI::getUserBySession();
         $uid = $User->getUUID();
 
+        if (
+            QUI::getUsers()->isSystemUser($User)
+            && !QUI::getPackage('quiqqer/watcher')->getConfig()?->getValue('settings', 'logSystemUser')
+        ) {
+            return false;
+        }
+
         if (isset(self::$checked[$uid])) {
             return self::$checked[$uid];
         }
 
 
         if (!is_array(self::$groups) || !is_array(self::$users)) {
-            $ugs = QUI\Utils\UserGroups::parseUsersGroupsString(
-                QUI::getPackage('quiqqer/watcher')
-                    ->getConfig()
-                    ->getValue('settings', 'users_and_groups')
-            );
+            $usersAndGroups = QUI::getPackage('quiqqer/watcher')
+                ->getConfig()
+                ?->getValue('settings', 'users_and_groups');
+
+            if (!is_string($usersAndGroups)) {
+                return false;
+            }
+
+            $ugs = QUI\Utils\UserGroups::parseUsersGroupsString($usersAndGroups);
 
             foreach ($ugs['groups'] as $_gid) {
                 self::$groups[$_gid] = true;
@@ -180,155 +189,150 @@ class Watcher
     /**
      * Return the watcher-log list
      *
-     * @param array $params - database query params (eq: order, limit)
-     * @param bool|array $search - search parameter
+     * @param array<string, mixed> $params - database query params (eq: order, limit)
+     * @param bool|array<string, mixed> $search - search parameter
      *
-     * @return array
+     * @return list<array<string, mixed>>
      */
     public static function getList(array $params = [], bool|array $search = false): array
     {
-        $PDO = QUI::getDataBase()->getPDO();
+        $QueryBuilder = QUI::getQueryBuilder();
+        $table = QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher'));
+        $id = QUI\Utils\Doctrine::quoteIdentifier('id');
+        $statusTime = QUI\Utils\Doctrine::quoteIdentifier('statusTime');
+        $uid = QUI\Utils\Doctrine::quoteIdentifier('uid');
+        $order = is_string($params['order'] ?? null) ? $params['order'] : 'statusTime';
+        $limit = $params['limit'] ?? 0;
 
-        if (!isset($params['order'])) {
-            $params['order'] = 'statusTime';
+        if (!is_int($limit) && !is_string($limit) && $limit !== false) {
+            $limit = 0;
         }
 
-        if (!isset($params['limit'])) {
-            $params['limit'] = 0;
-        }
+        $QueryBuilder
+            ->select(!empty($params['count']) ? 'COUNT(*) AS count' : '*')
+            ->from($table);
 
-        $query = 'SELECT * ';
-
-        if (isset($params['count'])) {
-            $query = 'SELECT COUNT(*) as count ';
-        }
-
-        $query .= ' FROM ' . QUI::getDBTableName('watcher');
-
-
-        // search
         if (is_array($search)) {
-            $searchQuery = [];
+            $searchUid = $search['uid'] ?? null;
+            $from = $search['from'] ?? null;
+            $to = $search['to'] ?? null;
 
-            if (!empty($search['uid'])) {
-                $searchQuery[] = 'uid = :uid';
+            if (is_int($searchUid) || is_string($searchUid)) {
+                $QueryBuilder
+                    ->andWhere($QueryBuilder->expr()->eq($uid, ':uid'))
+                    ->setParameter('uid', $searchUid);
             }
 
-            if (!empty($search['from'])) {
-                $searchQuery[] = 'statusTime >= :from';
+            if (is_string($from) && $from !== '') {
+                $QueryBuilder
+                    ->andWhere($QueryBuilder->expr()->gte($statusTime, ':from'))
+                    ->setParameter('from', $from);
             }
 
-            if (!empty($search['to'])) {
-                $searchQuery[] = 'statusTime <= :to';
+            if (is_string($to) && $to !== '') {
+                $QueryBuilder
+                    ->andWhere($QueryBuilder->expr()->lte($statusTime, ':to'))
+                    ->setParameter('to', $to);
             }
-
-            $query .= ' WHERE ' . implode(' AND ', $searchQuery);
         }
 
-
-        // order
-        switch ($params['order']) {
+        switch ($order) {
             case 'id':
+                $QueryBuilder->orderBy($id, 'ASC');
+                break;
+
             case 'id DESC':
+                $QueryBuilder->orderBy($id, 'DESC');
+                break;
+
             case 'id ASC':
-                $query .= ' ORDER BY ' . $params['order'];
+                $QueryBuilder->orderBy($id, 'ASC');
                 break;
 
             case 'uid':
+                $QueryBuilder->orderBy($uid, 'ASC')->addOrderBy($id, 'DESC');
+                break;
+
             case 'uid DESC':
+                $QueryBuilder->orderBy($uid, 'DESC')->addOrderBy($id, 'DESC');
+                break;
+
             case 'statusTime':
+                $QueryBuilder->orderBy($statusTime, 'ASC')->addOrderBy($id, 'DESC');
+                break;
+
             case 'statusTime DESC':
-                $query .= ' ORDER BY ' . $params['order'] . ', id DESC';
+                $QueryBuilder->orderBy($statusTime, 'DESC')->addOrderBy($id, 'DESC');
                 break;
 
             case 'uid ASC':
+                $QueryBuilder->orderBy($uid, 'ASC')->addOrderBy($id, 'ASC');
+                break;
+
             case 'statusTime ASC':
-                $query .= ' ORDER BY ' . $params['order'] . ', id ASC';
+                $QueryBuilder->orderBy($statusTime, 'ASC')->addOrderBy($id, 'ASC');
                 break;
 
             default:
-                $query .= ' ORDER BY statusTime ASC';
+                $QueryBuilder->orderBy($statusTime, 'ASC');
         }
 
-        // limit
-        if ($params['limit'] !== false) {
-            $query .= ' LIMIT :limit1, :limit2';
-        }
-
-
-        $Statement = $PDO->prepare($query);
-
-        // prepared statements
-        if ($params['limit'] !== false) {
-            if (!str_contains($params['limit'], ',')) {
-                $limit1 = 0;
-                $limit2 = (int)$params['limit'];
+        if ($limit !== false) {
+            if (!str_contains((string)$limit, ',')) {
+                $offset = 0;
+                $maximum = max(0, (int)$limit);
             } else {
-                $params['limit'] = explode(',', $params['limit']);
+                $limitParts = explode(',', (string)$limit, 2);
 
-                $limit1 = (int)$params['limit'][0];
-                $limit2 = (int)$params['limit'][1];
+                $offset = max(0, (int)$limitParts[0]);
+                $maximum = max(0, (int)$limitParts[1]);
             }
 
-            $Statement->bindValue(':limit1', $limit1, PDO::PARAM_INT);
-            $Statement->bindValue(':limit2', $limit2, PDO::PARAM_INT);
+            $QueryBuilder->setFirstResult($offset)->setMaxResults($maximum);
         }
-
-        if (is_array($search)) {
-            if (!empty($search['uid'])) {
-                $Statement->bindValue(':uid', $search['uid']);
-            }
-
-            if (!empty($search['from'])) {
-                $Statement->bindValue(
-                    ':from',
-                    $search['from']
-                );
-            }
-
-            if (!empty($search['to'])) {
-                $Statement->bindValue(':to', $search['to']);
-            }
-        }
-
 
         try {
-            $Statement->execute();
-        } catch (PDOException $Exception) {
+            return $QueryBuilder->executeQuery()->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
 
             return [];
         }
-
-        return $Statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
      * Return the result list for a Grid control
      *
-     * @param array $params - database query params (eq: order, limit)
-     * @param bool|array $search - search parameter
+     * @param array<string, mixed> $params - database query params (eq: order, limit)
+     * @param bool|array<string, mixed> $search - search parameter
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public static function getGridList(array &$params = [], bool|array $search = false): array
+    public static function getGridList(array $params = [], bool|array $search = false): array
     {
         $Grid = new QUI\Utils\Grid();
         $dbParams = $Grid->parseDBParams($params);
+        $sortOn = $params['sortOn'] ?? 'statusTime';
+        $sortBy = $params['sortBy'] ?? 'DESC';
 
-        if (!isset($params['sortOn'])) {
-            $params['sortOn'] = 'statusTime';
+        if (!is_string($sortOn)) {
+            $sortOn = 'statusTime';
         }
 
-        if (!isset($params['sortOn'])) {
-            $params['sortBy'] = 'DESC';
+        if (!is_string($sortBy)) {
+            $sortBy = 'DESC';
         }
 
-        if (isset($params['perPage']) && isset($params['page'])) {
-            $params['limit'] = (($params['page'] - 1) * $params['perPage']) . ',' . $params['perPage'];
+        $page = $params['page'] ?? null;
+        $perPage = $params['perPage'] ?? null;
+
+        if (is_numeric($page) && is_numeric($perPage)) {
+            $page = max(1, (int)$page);
+            $perPage = max(0, (int)$perPage);
+            $dbParams['limit'] = (($page - 1) * $perPage) . ',' . $perPage;
         }
 
-        $order = $params['sortOn'] . ' ' . $params['sortBy'];
+        $order = $sortOn . ' ' . strtoupper($sortBy);
 
         switch ($order) {
             case 'id':
@@ -347,19 +351,34 @@ class Watcher
         $result = self::getList($dbParams, $search);
 
         foreach ($result as $key => $value) {
-            if (!empty($value['localeGroup']) && !empty($value['localeVar'])) {
-                $localeParams = json_decode($value['localeParams'], true);
+            $localeGroup = $value['localeGroup'] ?? null;
+            $localeVar = $value['localeVar'] ?? null;
+            $localeParamsJson = $value['localeParams'] ?? null;
+
+            if (is_string($localeGroup) && $localeGroup !== '' && is_string($localeVar) && $localeVar !== '') {
+                $localeParams = is_string($localeParamsJson) ? json_decode($localeParamsJson, true) : [];
+
+                if (!is_array($localeParams)) {
+                    $localeParams = [];
+                }
 
                 $result[$key]['message'] = QUI::getLocale()->get(
-                    $value['localeGroup'],
-                    $value['localeVar'],
+                    $localeGroup,
+                    $localeVar,
                     $localeParams
                 );
             }
 
+            $userId = $value['uid'] ?? null;
+
+            if (!is_int($userId) && !is_string($userId)) {
+                $result[$key]['username'] = 'unknown';
+                continue;
+            }
+
             try {
                 $result[$key]['username'] = QUI::getUsers()
-                    ->get($value['uid'])
+                    ->get($userId)
                     ->getUsername();
             } catch (QUI\Exception) {
                 $result[$key]['username'] = 'unknown';
@@ -369,8 +388,9 @@ class Watcher
         $dbParams['limit'] = false;
         $dbParams['count'] = true;
         $count = self::getList($dbParams, $search);
+        $countValue = $count[0]['count'] ?? 0;
 
-        return $Grid->parseResult($result, $count[0]['count']);
+        return $Grid->parseResult($result, is_numeric($countValue) ? (int)$countValue : 0);
     }
 
     /**
@@ -394,65 +414,76 @@ class Watcher
         }
 
 
-        QUI::getDataBase()->delete(QUI::getDBTableName('watcher'), [
-            'statusTime' => [
-                'type' => '<=',
-                'value' => date('Y-m-d H:i:s', $date)
-            ]
-        ]);
+        $QueryBuilder = QUI::getQueryBuilder();
+        $statusTime = QUI\Utils\Doctrine::quoteIdentifier('statusTime');
+
+        $QueryBuilder
+            ->delete(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher')))
+            ->where($QueryBuilder->expr()->lte($statusTime, ':statusTime'))
+            ->setParameter('statusTime', date('Y-m-d H:i:s', $date))
+            ->executeStatement();
     }
 
     /**
-     * @param Package\Package $Package
+     * After all packages have been set up, add all their watches to the watch list.
+     *
      * @throws Exception
      */
-    public static function onPackageSetup(QUI\Package\Package $Package): void
+    public static function onSetupAllEnd(): void
     {
-        $dir = $Package->getDir();
-        $watcherXml = $dir . 'watch.xml';
+        foreach (QUI::getPackageManager()->getInstalled() as $plugin) {
+            $packageName = $plugin['name'];
+            $watcherXml = OPT_DIR . $packageName . '/products.xml';
 
-        if (!file_exists($watcherXml)) {
-            return;
-        }
-
-        $Dom = XML::getDomFromXml($watcherXml);
-        $Path = new DOMXPath($Dom);
-
-        $watchList = $Path->query("//quiqqer/watch");
-        $table = QUI::getDBTableName('watcherEvents');
-        $package = $Package->getName();
-
-        // clear watches of package
-        QUI::getDataBase()->delete($table, [
-            'package' => $package
-        ]);
-
-        // insert watches
-        foreach ($watchList as $Watch) {
-            /* @var $Watch DOMElement */
-            $ajax = $Watch->getAttribute('ajax');
-            $exec = $Watch->getAttribute('exec');
-            $event = $Watch->getAttribute('event');
-
-            if (!$exec || !is_callable($exec)) {
+            if (!file_exists($watcherXml)) {
                 continue;
             }
 
-            if ($ajax) {
-                QUI::getDataBase()->insert($table, [
-                    'package' => $package,
-                    'ajax' => $ajax,
+            $Dom = XML::getDomFromXml($watcherXml);
+            $Path = new DOMXPath($Dom);
+
+            $watchList = $Path->query("//quiqqer/watch");
+            $table = QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcherEvents'));
+
+            if ($watchList === false) {
+                continue;
+            }
+
+            // clear watches of package
+            QUI::getDataBaseConnection()->delete($table, [
+                'package' => $packageName
+            ]);
+
+            // insert watches
+            foreach ($watchList as $Watch) {
+                if (!$Watch instanceof DOMElement) {
+                    continue;
+                }
+
+                $ajax = $Watch->getAttribute('ajax');
+                $exec = $Watch->getAttribute('exec');
+                $event = $Watch->getAttribute('event');
+
+                if (!$exec || !is_callable($exec)) {
+                    continue;
+                }
+
+                if ($ajax) {
+                    QUI::getDataBaseConnection()->insert($table, [
+                        'package' => $packageName,
+                        'ajax' => $ajax,
+                        'exec' => $exec
+                    ]);
+
+                    continue;
+                }
+
+                QUI::getDataBaseConnection()->insert($table, [
+                    'package' => $packageName,
+                    'event' => $event,
                     'exec' => $exec
                 ]);
-
-                continue;
             }
-
-            QUI::getDataBase()->insert($table, [
-                'package' => $package,
-                'event' => $event,
-                'exec' => $exec
-            ]);
         }
     }
 }

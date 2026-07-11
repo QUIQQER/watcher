@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <events>
 
-    <event on="onPackageSetup" fire="\QUI\Watcher::onPackageSetup" />
+    <event on="onSetupAllEnd" fire="\QUI\Watcher::onSetupAllEnd" />
     <event on="onHeaderLoaded" fire="\QUI\Watcher\EventsReact::onHeaderLoaded" />
     <event on="onQuiqqerMigrationV2" fire="\QUI\Watcher\EventsReact::onQuiqqerMigrationV2" />
 

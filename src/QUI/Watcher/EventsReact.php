@@ -27,14 +27,14 @@ use function json_encode;
 class EventsReact
 {
     /**
-     * @var array|null
+     * @var array<string, array<string, list<array<string, mixed>>>>|null
      */
     protected static ?array $watcherEvents = null;
 
     /**
      *
      * @param string $event
-     * @param array $arguments
+     * @param array<array-key, mixed> $arguments
      * @throws Exception
      */
     public static function trigger(string $event, array $arguments = []): void
@@ -72,9 +72,7 @@ class EventsReact
             return;
         }
 
-        $Config = QUI::getPackage('quiqqer/watcher')->getConfig();
-
-        if (!$Config->getValue('settings', 'logEvents')) {
+        if (!QUI::getPackage('quiqqer/watcher')->getConfig()?->getValue('settings', 'logEvents')) {
             return;
         }
 
@@ -132,8 +130,8 @@ class EventsReact
             if (is_callable($exec)) {
                 try {
                     $str = call_user_func_array($exec, [
-                        'event' => $event,
-                        'params' => $arguments
+                        $event,
+                        $arguments
                     ]);
 
                     QUI\Watcher::addString($str, $event, $arguments);
@@ -147,16 +145,14 @@ class EventsReact
     /**
      * event on ajax call - React at ajax events
      *
-     * @param string|array $function
-     * @param string $result
-     * @param array $params
+     * @param string|array<array-key, mixed> $function
+     * @param string|array<array-key, mixed> $result
+     * @param array<array-key, mixed> $params
      * @throws Exception
      */
     public static function onAjaxCall(string|array $function, string|array $result, array $params): void
     {
-        $Config = QUI::getPackage('quiqqer/watcher')->getConfig();
-
-        if (!$Config->getValue('settings', 'logAjax')) {
+        if (!QUI::getPackage('quiqqer/watcher')->getConfig()?->getValue('settings', 'logAjax')) {
             return;
         }
 
@@ -184,9 +180,9 @@ class EventsReact
             if (is_callable($exec)) {
                 try {
                     $str = call_user_func_array($exec, [
-                        'ajax' => $function,
-                        'params' => $params,
-                        'result' => $result
+                        $function,
+                        $params,
+                        $result
                     ]);
 
                     QUI\Watcher::addString($str, $function, $params);
@@ -202,9 +198,7 @@ class EventsReact
      */
     public static function onHeaderLoaded(): void
     {
-        $Config = QUI::getPackage('quiqqer/watcher')->getConfig();
-
-        if (!$Config->getValue('settings', 'logEvents')) {
+        if (!QUI::getPackage('quiqqer/watcher')->getConfig()?->getValue('settings', 'logEvents')) {
             return;
         }
 
@@ -227,8 +221,8 @@ class EventsReact
 
                     try {
                         $str = call_user_func_array($exec, [
-                            'event' => $eventData['event'],
-                            'params' => func_get_args()
+                            $eventData['event'],
+                            func_get_args()
                         ]);
 
                         QUI\Watcher::addString($str, $eventData['event']);
@@ -322,7 +316,7 @@ class EventsReact
      * event onProjectConfigSave
      *
      * @param string $project
-     * @param array $config
+     * @param array<string, mixed> $config
      * @throws Exception
      */
     public static function onProjectConfigSave(string $project, array $config): void
@@ -619,7 +613,7 @@ class EventsReact
     /**
      * Return the global watch events -> from watch.xml's
      *
-     * @return array|null
+     * @return array<string, array<string, list<array<string, mixed>>>>|null
      */
     protected static function getWatchEvents(): ?array
     {
@@ -633,21 +627,26 @@ class EventsReact
 
         if (!self::$watcherEvents) {
             try {
-                $result = QUI::getDataBase()->fetch([
-                    'from' => QUI::getDBTableName('watcherEvents')
-                ]);
+                $result = QUI::getQueryBuilder()
+                    ->select('*')
+                    ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcherEvents')))
+                    ->executeQuery()
+                    ->fetchAllAssociative();
             } catch (\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
                 $result = [];
             }
 
             foreach ($result as $entry) {
-                if (!empty($entry['ajax'])) {
-                    self::$watcherEvents['ajax'][$entry['ajax']][] = $entry;
+                $ajax = $entry['ajax'] ?? null;
+                $event = $entry['event'] ?? null;
+
+                if (is_string($ajax) && $ajax !== '') {
+                    self::$watcherEvents['ajax'][$ajax][] = $entry;
                 }
 
-                if (!empty($entry['event'])) {
-                    self::$watcherEvents['event'][$entry['event']][] = $entry;
+                if (is_string($event) && $event !== '') {
+                    self::$watcherEvents['event'][$event][] = $entry;
                 }
             }
         }
@@ -662,20 +661,23 @@ class EventsReact
         $Console->writeLn('- Migrate watcher');
 
 
-        $result = QUI::getDataBase()->fetch([
-            'from' => QUI::getDBTableName('watcher')
-        ]);
+        $result = QUI::getQueryBuilder()
+            ->select('id', 'uid')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher')))
+            ->executeQuery()
+            ->fetchAllAssociative();
+        $table = QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher'));
 
         foreach ($result as $entry) {
             $uid = $entry['uid'];
 
-            if (!is_numeric($uid)) {
+            if ((!is_int($uid) && !is_string($uid)) || !is_numeric($uid)) {
                 continue;
             }
 
             try {
-                QUI::getDataBase()->update(
-                    QUI::getDBTableName('watcher'),
+                QUI::getDataBaseConnection()->update(
+                    $table,
                     ['uid' => QUI::getUsers()->get($uid)->getUUID()],
                     ['id' => $entry['id']]
                 );
