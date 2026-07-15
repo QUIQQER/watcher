@@ -101,12 +101,12 @@ define('package/quiqqer/watcher/bin/Panel', [
                 }, {
                     header   : QUILocale.get('quiqqer/system', 'user_id'),
                     dataIndex: 'uid',
-                    dataType : 'number',
+                    dataType : 'string',
                     width    : 100
                 }, {
                     header   : QUILocale.get('quiqqer/system', 'username'),
                     dataIndex: 'username',
-                    dataType : 'number',
+                    dataType : 'string',
                     width    : 100
                 }, {
                     header   : QUILocale.get('quiqqer/system', 'date'),

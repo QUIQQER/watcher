@@ -338,6 +338,9 @@ class Watcher
             case 'id':
             case 'id DESC':
             case 'id ASC':
+            case 'uid':
+            case 'uid DESC':
+            case 'uid ASC':
             case 'statusTime':
             case 'statusTime DESC':
             case 'statusTime ASC':
@@ -433,7 +436,7 @@ class Watcher
     {
         foreach (QUI::getPackageManager()->getInstalled() as $plugin) {
             $packageName = $plugin['name'];
-            $watcherXml = OPT_DIR . $packageName . '/products.xml';
+            $watcherXml = OPT_DIR . $packageName . '/watch.xml';
 
             if (!file_exists($watcherXml)) {
                 continue;
@@ -485,5 +488,7 @@ class Watcher
                 ]);
             }
         }
+
+        QUI\Watcher\EventsReact::clearWatchEventsCache();
     }
 }

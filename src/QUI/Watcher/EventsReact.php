@@ -8,8 +8,8 @@ namespace QUI\Watcher;
 
 use QUI;
 use QUI\Cache\Manager as CacheManager;
-use QUI\ERP\Accounting\Payments\Transactions\Factory;
 use QUI\Exception;
+use QUI\System\Console\Tools\MigrationV2;
 
 use function date;
 use function is_array;
@@ -656,21 +656,67 @@ class EventsReact
         return self::$watcherEvents;
     }
 
-    public static function onQuiqqerMigrationV2(QUI\System\Console\Tools\MigrationV2 $Console): void
+    public static function clearWatchEventsCache(): void
+    {
+        self::$watcherEvents = null;
+        CacheManager::clear('quiqqer/watcher/events');
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public static function onQuiqqerMigrationV2(MigrationV2 $Console): void
     {
         $Console->writeLn('- Migrate watcher');
 
+        $tableName = QUI::getDBTableName('watcher');
+        $SchemaManager = QUI::getSchemaManager();
 
-        $result = QUI::getQueryBuilder()
-            ->select('id', 'uid')
-            ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher')))
+        if (!$SchemaManager->tablesExist([$tableName])) {
+            return;
+        }
+
+        $Table = $SchemaManager->introspectTable($tableName);
+        $UidColumn = new \Doctrine\DBAL\Schema\Column(
+            'uid',
+            \Doctrine\DBAL\Types\Type::getType('string'),
+            ['length' => 50, 'notnull' => true]
+        );
+
+        if (!$Table->hasColumn('uid')) {
+            $SchemaManager->alterTable(new \Doctrine\DBAL\Schema\TableDiff(
+                $Table,
+                addedColumns: [$UidColumn]
+            ));
+        } else {
+            $CurrentUidColumn = $Table->getColumn('uid');
+
+            if (
+                !$CurrentUidColumn->getType() instanceof \Doctrine\DBAL\Types\StringType
+                || $CurrentUidColumn->getLength() !== 50
+                || !$CurrentUidColumn->getNotnull()
+            ) {
+                $SchemaManager->alterTable(new \Doctrine\DBAL\Schema\TableDiff(
+                    $Table,
+                    changedColumns: [
+                        'uid' => new \Doctrine\DBAL\Schema\ColumnDiff(
+                            $CurrentUidColumn,
+                            $UidColumn
+                        )
+                    ]
+                ));
+            }
+        }
+
+        $table = QUI\Utils\Doctrine::quoteIdentifier($tableName);
+        $uids = QUI::getQueryBuilder()
+            ->select('uid')
+            ->distinct()
+            ->from($table)
             ->executeQuery()
-            ->fetchAllAssociative();
-        $table = QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher'));
+            ->fetchFirstColumn();
 
-        foreach ($result as $entry) {
-            $uid = $entry['uid'];
-
+        foreach ($uids as $uid) {
             if ((!is_int($uid) && !is_string($uid)) || !is_numeric($uid)) {
                 continue;
             }
@@ -679,7 +725,7 @@ class EventsReact
                 QUI::getDataBaseConnection()->update(
                     $table,
                     ['uid' => QUI::getUsers()->get($uid)->getUUID()],
-                    ['id' => $entry['id']]
+                    ['uid' => $uid]
                 );
             } catch (QUI\Exception) {
             }
