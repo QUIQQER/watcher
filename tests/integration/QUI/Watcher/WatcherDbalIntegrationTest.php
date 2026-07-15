@@ -3,10 +3,13 @@
 namespace QUI\Watcher\Tests;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Types\StringType;
 use PHPUnit\Framework\TestCase;
 use QUI;
 use QUI\Interfaces\Users\User as UserInterface;
+use QUI\System\Console\Tools\MigrationV2;
 use QUI\Watcher;
+use QUI\Watcher\EventsReact;
 use ReflectionProperty;
 use Throwable;
 
@@ -17,6 +20,7 @@ class WatcherDbalIntegrationTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::skipIfDatabaseIsUnavailable();
+        EventsReact::onQuiqqerMigrationV2(new MigrationV2());
         self::cleanupFixtures();
     }
 
@@ -101,6 +105,29 @@ class WatcherDbalIntegrationTest extends TestCase
         $this->assertSame('unknown', $result['data'][0]['username']);
     }
 
+    public function testGridListSortsUuidValuesAsStrings(): void
+    {
+        $firstUid = self::TEST_PREFIX . 'a-' . uniqid();
+        $secondUid = self::TEST_PREFIX . 'b-' . uniqid();
+        $this->insertFixture($secondUid, 'second uid', '2026-01-01 10:00:00');
+        $this->insertFixture($firstUid, 'first uid', '2026-01-01 11:00:00');
+
+        $result = Watcher::getGridList(
+            [
+                'sortOn' => 'uid',
+                'sortBy' => 'ASC'
+            ]
+        );
+
+        $uids = array_column($result['data'], 'uid');
+        $firstPosition = array_search($firstUid, $uids, true);
+        $secondPosition = array_search($secondUid, $uids, true);
+
+        $this->assertIsInt($firstPosition);
+        $this->assertIsInt($secondPosition);
+        $this->assertLessThan($secondPosition, $firstPosition);
+    }
+
     public function testSystemUserLoggingCanBeEnabledExplicitly(): void
     {
         $Config = QUI::getPackage('quiqqer/watcher')->getConfig();
@@ -141,6 +168,74 @@ class WatcherDbalIntegrationTest extends TestCase
             self::replaceSessionUser($PreviousUser);
             self::resetWatcherState();
         }
+    }
+
+    public function testMigrationConvertsLegacyUserIdsToUuids(): void
+    {
+        $LegacyUser = null;
+
+        foreach (QUI::getUsers()->getUserIds() as $userData) {
+            $userId = $userData['id'] ?? null;
+            $userUuid = $userData['uuid'] ?? null;
+
+            if (!is_numeric($userId) || !is_string($userUuid) || $userUuid === '' || is_numeric($userUuid)) {
+                continue;
+            }
+
+            $LegacyUser = QUI::getUsers()->get((string)$userId);
+            break;
+        }
+
+        if ($LegacyUser === null) {
+            $this->markTestSkipped('No user with a legacy ID and UUID is available.');
+        }
+
+        $legacyUserId = $LegacyUser->getId();
+
+        if ($legacyUserId === false) {
+            $this->markTestSkipped('The migration user has no legacy ID.');
+        }
+
+        $message = self::TEST_PREFIX . uniqid();
+        $this->insertFixture((string)$legacyUserId, $message, '2026-01-01 10:00:00');
+
+        EventsReact::onQuiqqerMigrationV2(new MigrationV2());
+
+        $Connection = self::getConnection();
+        $messageColumn = $Connection->getDatabasePlatform()->quoteSingleIdentifier('message');
+        $uid = $Connection->createQueryBuilder()
+            ->select('uid')
+            ->from(self::getTable())
+            ->where($messageColumn . ' = :message')
+            ->setParameter('message', $message)
+            ->executeQuery()
+            ->fetchOne();
+
+        $this->assertSame($LegacyUser->getUUID(), $uid);
+
+        $UidColumn = QUI::getSchemaManager()
+            ->introspectTable(QUI::getDBTableName('watcher'))
+            ->getColumn('uid');
+
+        $this->assertInstanceOf(StringType::class, $UidColumn->getType());
+        $this->assertSame(50, $UidColumn->getLength());
+        $this->assertTrue($UidColumn->getNotnull());
+    }
+
+    public function testSetupRegistersPackageWatchFiles(): void
+    {
+        Watcher::onSetupAllEnd();
+
+        $QueryBuilder = self::getConnection()->createQueryBuilder();
+        $events = $QueryBuilder
+            ->select('event')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcherEvents')))
+            ->where($QueryBuilder->expr()->eq('package', ':package'))
+            ->setParameter('package', 'quiqqer/core')
+            ->executeQuery()
+            ->fetchFirstColumn();
+
+        $this->assertContains('onUserLoginError', $events);
     }
 
     private function insertFixture(string $uid, string $message, string $statusTime): void
