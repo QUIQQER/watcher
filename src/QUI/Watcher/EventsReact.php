@@ -683,27 +683,34 @@ class EventsReact
                 addedColumns: [$UidColumn]
             ));
         } else {
-            $SchemaManager->alterTable(new \Doctrine\DBAL\Schema\TableDiff(
-                $Table,
-                changedColumns: [
-                    'uid' => new \Doctrine\DBAL\Schema\ColumnDiff(
-                        $Table->getColumn('uid'),
-                        $UidColumn
-                    )
-                ]
-            ));
+            $CurrentUidColumn = $Table->getColumn('uid');
+
+            if (
+                !$CurrentUidColumn->getType() instanceof \Doctrine\DBAL\Types\StringType
+                || $CurrentUidColumn->getLength() !== 50
+                || !$CurrentUidColumn->getNotnull()
+            ) {
+                $SchemaManager->alterTable(new \Doctrine\DBAL\Schema\TableDiff(
+                    $Table,
+                    changedColumns: [
+                        'uid' => new \Doctrine\DBAL\Schema\ColumnDiff(
+                            $CurrentUidColumn,
+                            $UidColumn
+                        )
+                    ]
+                ));
+            }
         }
 
         $table = QUI\Utils\Doctrine::quoteIdentifier($tableName);
-        $result = QUI::getQueryBuilder()
-            ->select('id', 'uid')
+        $uids = QUI::getQueryBuilder()
+            ->select('uid')
+            ->distinct()
             ->from($table)
             ->executeQuery()
-            ->fetchAllAssociative();
+            ->fetchFirstColumn();
 
-        foreach ($result as $entry) {
-            $uid = $entry['uid'];
-
+        foreach ($uids as $uid) {
             if ((!is_int($uid) && !is_string($uid)) || !is_numeric($uid)) {
                 continue;
             }
@@ -712,7 +719,7 @@ class EventsReact
                 QUI::getDataBaseConnection()->update(
                     $table,
                     ['uid' => QUI::getUsers()->get($uid)->getUUID()],
-                    ['id' => $entry['id']]
+                    ['uid' => $uid]
                 );
             } catch (QUI\Exception) {
             }
