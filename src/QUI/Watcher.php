@@ -433,7 +433,7 @@ class Watcher
     {
         foreach (QUI::getPackageManager()->getInstalled() as $plugin) {
             $packageName = $plugin['name'];
-            $watcherXml = OPT_DIR . $packageName . '/products.xml';
+            $watcherXml = OPT_DIR . $packageName . '/watch.xml';
 
             if (!file_exists($watcherXml)) {
                 continue;
@@ -485,5 +485,7 @@ class Watcher
                 ]);
             }
         }
+
+        QUI\Watcher\EventsReact::clearWatchEventsCache();
     }
 }

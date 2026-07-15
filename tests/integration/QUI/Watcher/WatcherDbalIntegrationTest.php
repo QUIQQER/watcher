@@ -199,6 +199,22 @@ class WatcherDbalIntegrationTest extends TestCase
         $this->assertTrue($UidColumn->getNotnull());
     }
 
+    public function testSetupRegistersPackageWatchFiles(): void
+    {
+        Watcher::onSetupAllEnd();
+
+        $QueryBuilder = self::getConnection()->createQueryBuilder();
+        $events = $QueryBuilder
+            ->select('event')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcherEvents')))
+            ->where($QueryBuilder->expr()->eq('package', ':package'))
+            ->setParameter('package', 'quiqqer/core')
+            ->executeQuery()
+            ->fetchFirstColumn();
+
+        $this->assertContains('onUserLoginError', $events);
+    }
+
     private function insertFixture(string $uid, string $message, string $statusTime): void
     {
         self::getConnection()->insert(self::getTable(), [

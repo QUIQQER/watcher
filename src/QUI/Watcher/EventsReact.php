@@ -656,6 +656,12 @@ class EventsReact
         return self::$watcherEvents;
     }
 
+    public static function clearWatchEventsCache(): void
+    {
+        self::$watcherEvents = null;
+        CacheManager::clear('quiqqer/watcher/events');
+    }
+
     /**
      * @throws \Doctrine\DBAL\Exception
      */
