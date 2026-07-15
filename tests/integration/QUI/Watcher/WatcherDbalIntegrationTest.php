@@ -105,6 +105,29 @@ class WatcherDbalIntegrationTest extends TestCase
         $this->assertSame('unknown', $result['data'][0]['username']);
     }
 
+    public function testGridListSortsUuidValuesAsStrings(): void
+    {
+        $firstUid = self::TEST_PREFIX . 'a-' . uniqid();
+        $secondUid = self::TEST_PREFIX . 'b-' . uniqid();
+        $this->insertFixture($secondUid, 'second uid', '2026-01-01 10:00:00');
+        $this->insertFixture($firstUid, 'first uid', '2026-01-01 11:00:00');
+
+        $result = Watcher::getGridList(
+            [
+                'sortOn' => 'uid',
+                'sortBy' => 'ASC'
+            ]
+        );
+
+        $uids = array_column($result['data'], 'uid');
+        $firstPosition = array_search($firstUid, $uids, true);
+        $secondPosition = array_search($secondUid, $uids, true);
+
+        $this->assertIsInt($firstPosition);
+        $this->assertIsInt($secondPosition);
+        $this->assertLessThan($secondPosition, $firstPosition);
+    }
+
     public function testSystemUserLoggingCanBeEnabledExplicitly(): void
     {
         $Config = QUI::getPackage('quiqqer/watcher')->getConfig();

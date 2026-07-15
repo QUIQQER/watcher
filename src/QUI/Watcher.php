@@ -338,6 +338,9 @@ class Watcher
             case 'id':
             case 'id DESC':
             case 'id ASC':
+            case 'uid':
+            case 'uid DESC':
+            case 'uid ASC':
             case 'statusTime':
             case 'statusTime DESC':
             case 'statusTime ASC':
