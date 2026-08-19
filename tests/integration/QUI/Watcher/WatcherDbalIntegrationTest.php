@@ -3,42 +3,21 @@
 namespace QUI\Watcher\Tests;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\StringType;
-use PHPUnit\Framework\TestCase;
 use QUI;
 use QUI\Interfaces\Users\User as UserInterface;
 use QUI\System\Console\Tools\MigrationV2;
 use QUI\Watcher;
 use QUI\Watcher\EventsReact;
+use QUI\Watcher\Tests\Fixtures\WatcherSqliteTestCase;
 use ReflectionProperty;
-use Throwable;
 
-class WatcherDbalIntegrationTest extends TestCase
+require_once __DIR__ . '/Fixtures/WatcherSqliteTestCase.php';
+
+class WatcherDbalIntegrationTest extends WatcherSqliteTestCase
 {
     private const TEST_PREFIX = 'phpunit-watcher-dbal-';
-
-    public static function setUpBeforeClass(): void
-    {
-        self::skipIfDatabaseIsUnavailable();
-        EventsReact::onQuiqqerMigrationV2(new MigrationV2());
-        self::cleanupFixtures();
-    }
-
-    protected function setUp(): void
-    {
-        self::skipIfDatabaseIsUnavailable();
-        self::cleanupFixtures();
-    }
-
-    protected function tearDown(): void
-    {
-        self::cleanupFixtures();
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        self::cleanupFixtures();
-    }
 
     public function testListSupportsFilteringSortingPaginationAndCount(): void
     {
@@ -172,29 +151,20 @@ class WatcherDbalIntegrationTest extends TestCase
 
     public function testMigrationConvertsLegacyUserIdsToUuids(): void
     {
-        $LegacyUser = null;
-
-        foreach (QUI::getUsers()->getUserIds() as $userData) {
-            $userId = $userData['id'] ?? null;
-            $userUuid = $userData['uuid'] ?? null;
-
-            if (!is_numeric($userId) || !is_string($userUuid) || $userUuid === '' || is_numeric($userUuid)) {
-                continue;
-            }
-
-            $LegacyUser = QUI::getUsers()->get((string)$userId);
-            break;
-        }
-
-        if ($LegacyUser === null) {
-            $this->markTestSkipped('No user with a legacy ID and UUID is available.');
-        }
-
+        $LegacyUser = QUI::getUsers()->getSystemUser();
         $legacyUserId = $LegacyUser->getId();
 
-        if ($legacyUserId === false) {
-            $this->markTestSkipped('The migration user has no legacy ID.');
-        }
+        self::assertIsInt($legacyUserId);
+
+        $SchemaManager = $this->connection->createSchemaManager();
+        $SchemaManager->dropTable(QUI::getDBTableName('watcher'));
+        $LegacyTable = new Table(QUI::getDBTableName('watcher'));
+        $LegacyTable->addColumn('id', 'integer', ['autoincrement' => true]);
+        $LegacyTable->addColumn('uid', 'integer');
+        $LegacyTable->addColumn('message', 'text', ['notnull' => false]);
+        $LegacyTable->addColumn('statusTime', 'datetime', ['notnull' => false]);
+        $LegacyTable->setPrimaryKey(['id']);
+        $SchemaManager->createTable($LegacyTable);
 
         $message = self::TEST_PREFIX . uniqid();
         $this->insertFixture((string)$legacyUserId, $message, '2026-01-01 10:00:00');
@@ -222,6 +192,27 @@ class WatcherDbalIntegrationTest extends TestCase
         $this->assertTrue($UidColumn->getNotnull());
     }
 
+    public function testMigrationAddsMissingUidColumnAndIgnoresMissingTable(): void
+    {
+        $SchemaManager = $this->connection->createSchemaManager();
+        $SchemaManager->dropTable(QUI::getDBTableName('watcher'));
+
+        EventsReact::onQuiqqerMigrationV2(new MigrationV2());
+        self::assertFalse($SchemaManager->tablesExist([QUI::getDBTableName('watcher')]));
+
+        $Table = new Table(QUI::getDBTableName('watcher'));
+        $Table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $Table->setPrimaryKey(['id']);
+        $SchemaManager->createTable($Table);
+
+        EventsReact::onQuiqqerMigrationV2(new MigrationV2());
+
+        $UidColumn = $SchemaManager->introspectTable(QUI::getDBTableName('watcher'))->getColumn('uid');
+        self::assertInstanceOf(StringType::class, $UidColumn->getType());
+        self::assertSame(50, $UidColumn->getLength());
+        self::assertTrue($UidColumn->getNotnull());
+    }
+
     public function testSetupRegistersPackageWatchFiles(): void
     {
         Watcher::onSetupAllEnd();
@@ -245,39 +236,6 @@ class WatcherDbalIntegrationTest extends TestCase
             'uid' => $uid,
             'statusTime' => $statusTime
         ]);
-    }
-
-    private static function skipIfDatabaseIsUnavailable(): void
-    {
-        try {
-            self::getConnection()->createQueryBuilder()
-                ->select('1')
-                ->from(self::getTable())
-                ->setMaxResults(1)
-                ->executeQuery()
-                ->free();
-        } catch (Throwable $Exception) {
-            self::markTestSkipped('QUIQQER database is not available: ' . $Exception->getMessage());
-        }
-    }
-
-    private static function cleanupFixtures(): void
-    {
-        try {
-            $Connection = self::getConnection();
-            $uid = $Connection->getDatabasePlatform()->quoteSingleIdentifier('uid');
-            $message = $Connection->getDatabasePlatform()->quoteSingleIdentifier('message');
-
-            $Connection->createQueryBuilder()
-                ->delete(self::getTable())
-                ->where($uid . ' LIKE :uid')
-                ->orWhere($message . ' LIKE :message')
-                ->setParameter('uid', self::TEST_PREFIX . '%')
-                ->setParameter('message', self::TEST_PREFIX . '%')
-                ->executeStatement();
-        } catch (Throwable) {
-            // The availability check reports DB problems. Cleanup should not hide the test result.
-        }
     }
 
     private static function getConnection(): Connection
@@ -314,14 +272,6 @@ class WatcherDbalIntegrationTest extends TestCase
         $Property->setValue($Users, $User);
 
         return $PreviousUser instanceof UserInterface ? $PreviousUser : QUI::getUsers()->getNobody();
-    }
-
-    private static function resetWatcherState(): void
-    {
-        foreach (['groups' => null, 'users' => null, 'checked' => []] as $property => $value) {
-            $Property = new ReflectionProperty(Watcher::class, $property);
-            $Property->setValue(null, $value);
-        }
     }
 
     private static function restoreConfigValue(
