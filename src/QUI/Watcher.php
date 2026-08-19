@@ -329,6 +329,7 @@ class Watcher
         if (is_numeric($page) && is_numeric($perPage)) {
             $page = max(1, (int)$page);
             $perPage = max(0, (int)$perPage);
+            $Grid->setAttribute('page', $page);
             $dbParams['limit'] = (($page - 1) * $perPage) . ',' . $perPage;
         }
 
