@@ -107,7 +107,8 @@ class EventsReactIntegrationTest extends WatcherSqliteTestCase
         EventsReact::onMediaRename($MediaItem);
 
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT localeVar, "call", callParams, localeParams FROM ' . $this->watcherTable() . ' ORDER BY id'
+            'SELECT localeVar, ' . $this->watcherCallColumn() . ', callParams, localeParams FROM '
+            . $this->watcherTable() . ' ORDER BY id'
         );
         $expectedCalls = [
             'userSave', 'userSetPassword', 'userDisable', 'userActivate', 'userDeactivate', 'userDelete',
@@ -168,7 +169,8 @@ class EventsReactIntegrationTest extends WatcherSqliteTestCase
         EventsReact::onAjaxCall(['custom.ajax', 42, 'missing.ajax'], ['ok' => true], ['id' => 43]);
 
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT message, "call", callParams FROM ' . $this->watcherTable() . ' ORDER BY id'
+            'SELECT message, ' . $this->watcherCallColumn() . ', callParams FROM '
+            . $this->watcherTable() . ' ORDER BY id'
         );
 
         self::assertCount(2, $rows);
@@ -203,7 +205,7 @@ class EventsReactIntegrationTest extends WatcherSqliteTestCase
             $EventsManager->fireEvent('onPhpunitHeaderEvent', [['id' => 99]]);
 
             $row = $this->connection->fetchAssociative(
-                'SELECT message, "call" FROM ' . $this->watcherTable()
+                'SELECT message, ' . $this->watcherCallColumn() . ' FROM ' . $this->watcherTable()
             );
 
             self::assertIsArray($row);

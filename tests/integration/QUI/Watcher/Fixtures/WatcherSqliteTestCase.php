@@ -163,6 +163,11 @@ abstract class WatcherSqliteTestCase extends TestCase
         return QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher'));
     }
 
+    protected function watcherCallColumn(): string
+    {
+        return $this->connection->getDatabasePlatform()->quoteSingleIdentifier('call');
+    }
+
     private function setConnection(Connection $Connection): void
     {
         (new ReflectionProperty(QUI::class, 'QueryBuilder'))->setValue(null, $Connection);
