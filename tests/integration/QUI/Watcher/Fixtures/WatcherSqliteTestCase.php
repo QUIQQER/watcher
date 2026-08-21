@@ -12,6 +12,7 @@ use QUI\Permissions\Permission;
 use QUI\Update;
 use QUI\Watcher;
 use QUI\Watcher\EventsReact;
+use QUI\Watcher\Tests\DatabaseEnvironment;
 use ReflectionProperty;
 
 abstract class WatcherSqliteTestCase extends TestCase
@@ -19,6 +20,7 @@ abstract class WatcherSqliteTestCase extends TestCase
     protected Connection $connection;
 
     private Connection $originalConnection;
+    private bool $ownsTestConnection = false;
     private mixed $originalSessionUser;
     private mixed $originalPermissionUser;
     private bool $hadWatcherEventsCache = false;
@@ -35,10 +37,15 @@ abstract class WatcherSqliteTestCase extends TestCase
         parent::setUp();
 
         $this->originalConnection = QUI::getDataBaseConnection();
-        $this->connection = DriverManager::getConnection([
-            'driver' => 'pdo_sqlite',
-            'memory' => true
-        ]);
+        if (DatabaseEnvironment::usesCiDatabase()) {
+            $this->connection = $this->originalConnection;
+        } else {
+            $this->connection = DriverManager::getConnection([
+                'driver' => 'pdo_sqlite',
+                'memory' => true
+            ]);
+            $this->ownsTestConnection = true;
+        }
 
         $Users = QUI::getUsers();
         $Session = new ReflectionProperty($Users, 'Session');
@@ -70,13 +77,21 @@ abstract class WatcherSqliteTestCase extends TestCase
 
         CacheManager::clear($this->getWatcherEventsCacheKey());
         (new ReflectionProperty(EventsReact::class, 'watcherEvents'))->setValue(null, null);
-        $this->setConnection($this->connection);
-        Update::importDatabase(dirname(__DIR__, 5) . '/database.xml');
+        if ($this->ownsTestConnection) {
+            $this->setConnection($this->connection);
+            Update::importDatabase(dirname(__DIR__, 5) . '/database.xml');
+        }
+
+        $this->restoreDatabaseSchema();
+        $this->clearDatabaseFixtures();
         $this->resetWatcherState();
     }
 
     protected function tearDown(): void
     {
+        $this->restoreDatabaseSchema();
+        $this->clearDatabaseFixtures();
+
         $this->restoreWatcherConfig();
 
         foreach ($this->originalWatcherState as $property => $value) {
@@ -96,7 +111,9 @@ abstract class WatcherSqliteTestCase extends TestCase
             $this->originalSessionUser
         );
         (new ReflectionProperty(Permission::class, 'User'))->setValue(null, $this->originalPermissionUser);
-        $this->connection->close();
+        if ($this->ownsTestConnection) {
+            $this->connection->close();
+        }
 
         parent::tearDown();
     }
@@ -146,9 +163,44 @@ abstract class WatcherSqliteTestCase extends TestCase
         return QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('watcher'));
     }
 
+    protected function watcherCallColumn(): string
+    {
+        return $this->connection->getDatabasePlatform()->quoteSingleIdentifier('call');
+    }
+
     private function setConnection(Connection $Connection): void
     {
         (new ReflectionProperty(QUI::class, 'QueryBuilder'))->setValue(null, $Connection);
+    }
+
+    private function restoreDatabaseSchema(): void
+    {
+        if (!$this->ownsTestConnection) {
+            Update::importDatabase(dirname(__DIR__, 5) . '/database.xml');
+        }
+    }
+
+    private function clearDatabaseFixtures(): void
+    {
+        $SchemaManager = $this->connection->createSchemaManager();
+        $watcherTable = QUI::getDBTableName('watcher');
+
+        if ($SchemaManager->tablesExist([$watcherTable])) {
+            $this->connection->executeStatement(
+                'DELETE FROM ' . QUI\Utils\Doctrine::quoteIdentifier($watcherTable)
+            );
+        }
+
+        $eventsTable = QUI::getDBTableName('watcherEvents');
+
+        if ($SchemaManager->tablesExist([$eventsTable])) {
+            $QueryBuilder = $this->connection->createQueryBuilder();
+            $QueryBuilder
+                ->delete(QUI\Utils\Doctrine::quoteIdentifier($eventsTable))
+                ->where($QueryBuilder->expr()->like('package', ':package'))
+                ->setParameter('package', 'phpunit/%')
+                ->executeStatement();
+        }
     }
 
     private function restoreWatcherConfig(): void

@@ -8,6 +8,7 @@ if (!defined('QUIQQER_AJAX')) {
     define('QUIQQER_AJAX', true);
 }
 
+require_once __DIR__ . '/DatabaseEnvironment.php';
 require_once __DIR__ . '/../../../../bootstrap.php';
 
 spl_autoload_register(static function (string $class): void {
