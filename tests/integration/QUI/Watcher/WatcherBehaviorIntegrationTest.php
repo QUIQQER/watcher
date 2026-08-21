@@ -27,7 +27,7 @@ class WatcherBehaviorIntegrationTest extends WatcherSqliteTestCase
         );
 
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT message, localeGroup, localeVar, localeParams, "call", callParams, uid '
+            'SELECT message, localeGroup, localeVar, localeParams, ' . $this->watcherCallColumn() . ', callParams, uid '
             . 'FROM ' . $this->watcherTable() . ' ORDER BY id ASC'
         );
 
