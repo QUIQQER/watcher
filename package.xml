@@ -8,6 +8,16 @@
             <locale group="quiqqer/watcher" var="package.description"/>
         </description>
 
+        <capabilities schemaVersion="1">
+            <capability id="security.user-activity-monitoring">
+                <title>User Activity Monitoring</title>
+                <description>
+                    Monitors and logs configurable backend actions for selected users or groups, with extensible
+                    event coverage, searchable activity history, and permission-controlled retention.
+                </description>
+            </capability>
+        </capabilities>
+
         <image src="URL_OPT_DIR/quiqqer/watcher/bin/images/Logo.jpg"/>
 
         <support>
