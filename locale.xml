@@ -4,55 +4,113 @@
         <locale name="panel.title">
             <de><![CDATA[Watcher]]></de>
             <en><![CDATA[Watcher]]></en>
+            <es><![CDATA[Watcher]]></es>
+            <pt><![CDATA[Watcher]]></pt>
+            <fr><![CDATA[Watcher]]></fr>
+            <it><![CDATA[Watcher]]></it>
+            <pl><![CDATA[Watcher]]></pl>
         </locale>
         <locale name="grid.message">
             <de><![CDATA[Nachricht]]></de>
             <en><![CDATA[Message]]></en>
+            <es><![CDATA[Mensaje]]></es>
+            <pt><![CDATA[Mensagem]]></pt>
+            <fr><![CDATA[Message]]></fr>
+            <it><![CDATA[Messaggio]]></it>
+            <pl><![CDATA[Komunikat]]></pl>
         </locale>
         <locale name="grid.call">
             <de><![CDATA[Aufruf]]></de>
             <en><![CDATA[Call]]></en>
+            <es><![CDATA[Llamada]]></es>
+            <pt><![CDATA[Chamada]]></pt>
+            <fr><![CDATA[Appel]]></fr>
+            <it><![CDATA[Chiamata]]></it>
+            <pl><![CDATA[Wywołanie]]></pl>
         </locale>
         <locale name="grid.callParams">
             <de><![CDATA[Aufruf-Parameter]]></de>
             <en><![CDATA[Call parameters]]></en>
+            <es><![CDATA[Parámetros de la llamada]]></es>
+            <pt><![CDATA[Parâmetros da chamada]]></pt>
+            <fr><![CDATA[Paramètres de l’appel]]></fr>
+            <it><![CDATA[Parametri della chiamata]]></it>
+            <pl><![CDATA[Parametry wywołania]]></pl>
         </locale>
         <locale name="grid.search.info" html="true">
-            <de><![CDATA[Suchparameter sind aktiviert.<br />
-                Klicken Sie hier um die Suche zu beenden und alle Benutzer wieder anzeigen zu lassen.]]></de>
-            <en><![CDATA[Search parameters are activated. <br />
-                Click here to end the search and to display all users again.]]></en>
+            <de><![CDATA[Suchfilter sind aktiviert.<br />Klicken Sie hier, um die Suche zu beenden und wieder alle Protokolleinträge anzuzeigen.]]></de>
+            <en><![CDATA[Search filters are active.<br />Click here to end the search and display all log entries again.]]></en>
+            <es><![CDATA[Hay filtros de búsqueda activos.<br />Haz clic aquí para finalizar la búsqueda y volver a mostrar todas las entradas del registro.]]></es>
+            <pt><![CDATA[Existem filtros de pesquisa ativos.<br />Clique aqui para terminar a pesquisa e voltar a mostrar todas as entradas do registo.]]></pt>
+            <fr><![CDATA[Des filtres de recherche sont actifs.<br />Cliquez ici pour terminer la recherche et afficher de nouveau toutes les entrées du journal.]]></fr>
+            <it><![CDATA[Sono attivi dei filtri di ricerca.<br />Clicca qui per terminare la ricerca e visualizzare di nuovo tutte le voci del log.]]></it>
+            <pl><![CDATA[Filtry wyszukiwania są aktywne.<br />Kliknij tutaj, aby zakończyć wyszukiwanie i ponownie wyświetlić wszystkie wpisy dziennika.]]></pl>
         </locale>
 
         <locale name="panel.button.search.title">
             <de><![CDATA[Suche]]></de>
             <en><![CDATA[Search]]></en>
+            <es><![CDATA[Buscar]]></es>
+            <pt><![CDATA[Pesquisar]]></pt>
+            <fr><![CDATA[Rechercher]]></fr>
+            <it><![CDATA[Cerca]]></it>
+            <pl><![CDATA[Szukaj]]></pl>
         </locale>
         <locale name="panel.button.clear.title">
             <de><![CDATA[Watcher-Log leeren bis...]]></de>
-            <en><![CDATA[Watcher-Log leeren bis...]]></en>
+            <en><![CDATA[Clear Watcher log entries before...]]></en>
+            <es><![CDATA[Borrar entradas de Watcher anteriores a...]]></es>
+            <pt><![CDATA[Eliminar entradas do Watcher anteriores a...]]></pt>
+            <fr><![CDATA[Supprimer les entrées de Watcher antérieures au...]]></fr>
+            <it><![CDATA[Elimina voci di Watcher precedenti al...]]></it>
+            <pl><![CDATA[Usuń wpisy Watcher sprzed...]]></pl>
         </locale>
 
         <locale name="panel.search.title">
-            <de><![CDATA[Watch-Log Suche]]></de>
-            <en><![CDATA[Watch-Log search]]></en>
+            <de><![CDATA[Watcher-Log durchsuchen]]></de>
+            <en><![CDATA[Search Watcher log]]></en>
+            <es><![CDATA[Buscar en el registro de Watcher]]></es>
+            <pt><![CDATA[Pesquisar no registo do Watcher]]></pt>
+            <fr><![CDATA[Rechercher dans le journal de Watcher]]></fr>
+            <it><![CDATA[Cerca nel log di Watcher]]></it>
+            <pl><![CDATA[Wyszukiwanie w dzienniku Watcher]]></pl>
         </locale>
         <locale name="panel.search.button.close">
             <de><![CDATA[Suche schließen]]></de>
             <en><![CDATA[Close search]]></en>
+            <es><![CDATA[Cerrar búsqueda]]></es>
+            <pt><![CDATA[Fechar pesquisa]]></pt>
+            <fr><![CDATA[Fermer la recherche]]></fr>
+            <it><![CDATA[Chiudi la ricerca]]></it>
+            <pl><![CDATA[Zamknij wyszukiwanie]]></pl>
         </locale>
         <locale name="panel.search.button.search">
             <de><![CDATA[Suche starten]]></de>
             <en><![CDATA[Start search]]></en>
+            <es><![CDATA[Iniciar búsqueda]]></es>
+            <pt><![CDATA[Iniciar pesquisa]]></pt>
+            <fr><![CDATA[Lancer la recherche]]></fr>
+            <it><![CDATA[Avvia la ricerca]]></it>
+            <pl><![CDATA[Rozpocznij wyszukiwanie]]></pl>
         </locale>
 
         <locale name="panel.clear.title">
-            <de><![CDATA[Watch-Log leeren]]></de>
-            <en><![CDATA[Watch-Log clear]]></en>
+            <de><![CDATA[Watcher-Log leeren]]></de>
+            <en><![CDATA[Clear Watcher log]]></en>
+            <es><![CDATA[Vaciar el registro de Watcher]]></es>
+            <pt><![CDATA[Limpar o registo do Watcher]]></pt>
+            <fr><![CDATA[Vider le journal de Watcher]]></fr>
+            <it><![CDATA[Svuota il log di Watcher]]></it>
+            <pl><![CDATA[Wyczyść dziennik Watcher]]></pl>
         </locale>
         <locale name="panel.clear.btn.execute">
-            <de><![CDATA[Watcher-Log leeren ausführen]]></de>
-            <en><![CDATA[Run clearing Watch-Log]]></en>
+            <de><![CDATA[Watcher-Log leeren]]></de>
+            <en><![CDATA[Clear Watcher log]]></en>
+            <es><![CDATA[Vaciar el registro de Watcher]]></es>
+            <pt><![CDATA[Limpar o registo do Watcher]]></pt>
+            <fr><![CDATA[Vider le journal de Watcher]]></fr>
+            <it><![CDATA[Svuota il log di Watcher]]></it>
+            <pl><![CDATA[Wyczyść dziennik Watcher]]></pl>
         </locale>
 
     </groups>
@@ -61,25 +119,41 @@
         <locale name="permission.quiqqer.watcher._header">
             <de><![CDATA[Watcher]]></de>
             <en><![CDATA[Watcher]]></en>
+            <es><![CDATA[Watcher]]></es>
+            <pt><![CDATA[Watcher]]></pt>
+            <fr><![CDATA[Watcher]]></fr>
+            <it><![CDATA[Watcher]]></it>
+            <pl><![CDATA[Watcher]]></pl>
         </locale>
         <locale name="permission.quiqqer.watcher.readlog">
             <de><![CDATA[Darf Watch-Logs aufrufen und lesen]]></de>
             <en><![CDATA[May retrieve and read Watch logs]]></en>
+            <es><![CDATA[Puede consultar y leer los registros de Watcher]]></es>
+            <pt><![CDATA[Pode consultar e ler os registos do Watcher]]></pt>
+            <fr><![CDATA[Peut consulter et lire les journaux de Watcher]]></fr>
+            <it><![CDATA[Può consultare e leggere i log di Watcher]]></it>
+            <pl><![CDATA[Może przeglądać i odczytywać dzienniki Watcher]]></pl>
         </locale>
         <locale name="panel.clear.text" html="true">
-            <de><![CDATA[
-                <h1>Leeren Sie die Watch-Log.</h1>
-                Alle Daten vor dem angegebenen Datum werden unwiederruflich gelöscht.
-            ]]></de>
+            <de><![CDATA[<h1>Leeren Sie das Watcher-Log.</h1>Alle Daten vor dem angegebenen Datum werden unwiderruflich gelöscht.]]></de>
             <en><![CDATA[
                 <h1>Clear the watch log.</h1>
                 All data before the specified date will be deleted irrevocably.
             ]]></en>
+            <es><![CDATA[<h1>Vaciar el registro de Watcher.</h1>Todos los datos anteriores a la fecha indicada se eliminarán de forma permanente.]]></es>
+            <pt><![CDATA[<h1>Limpar o registo do Watcher.</h1>Todos os dados anteriores à data indicada serão eliminados permanentemente.]]></pt>
+            <fr><![CDATA[<h1>Vider le journal de Watcher.</h1>Toutes les données antérieures à la date indiquée seront supprimées définitivement.]]></fr>
+            <it><![CDATA[<h1>Svuota il log di Watcher.</h1>Tutti i dati precedenti alla data indicata verranno eliminati definitivamente.]]></it>
+            <pl><![CDATA[<h1>Wyczyść dziennik Watcher.</h1>Wszystkie dane sprzed podanej daty zostaną trwale usunięte.]]></pl>
         </locale>
         <locale name="exception.quiqqer.watcher.clearlog.error.wrongDateFormat">
-            <de>
-                <![CDATA[Das leeren der Watch-Log hat leider nicht funktioniert. Das Datumsformat hat ein falsches Format.]]></de>
-            <en><![CDATA[The clearing of the Watch-Log did not work. The date format has an incorrect format.]]></en>
+            <de><![CDATA[Das Watcher-Log konnte nicht geleert werden. Das Datumsformat ist nicht korrekt.]]></de>
+            <en><![CDATA[The Watcher log could not be cleared. The date format is incorrect.]]></en>
+            <es><![CDATA[No se ha podido vaciar el registro de Watcher. El formato de fecha no es válido.]]></es>
+            <pt><![CDATA[Não foi possível limpar o registo do Watcher. O formato da data é inválido.]]></pt>
+            <fr><![CDATA[Impossible de vider le journal de Watcher. Le format de la date est incorrect.]]></fr>
+            <it><![CDATA[Impossibile svuotare il log di Watcher. Il formato della data non è valido.]]></it>
+            <pl><![CDATA[Nie udało się wyczyścić dziennika Watcher. Format daty jest nieprawidłowy.]]></pl>
         </locale>
     </groups>
 
@@ -87,21 +161,41 @@
         
         <!-- Crons -->
         <locale name="cron.clearWatcherEntries.title">
-            <de><![CDATA[Watcher Log-Einträge löschen]]></de>
+            <de><![CDATA[Watcher-Log-Einträge löschen]]></de>
             <en><![CDATA[Delete Watcher log entries]]></en>
+            <es><![CDATA[Eliminar entradas del registro de Watcher]]></es>
+            <pt><![CDATA[Eliminar entradas do registo do Watcher]]></pt>
+            <fr><![CDATA[Supprimer les entrées du journal de Watcher]]></fr>
+            <it><![CDATA[Elimina le voci del log di Watcher]]></it>
+            <pl><![CDATA[Usuń wpisy dziennika Watcher]]></pl>
         </locale>
         <locale name="cron.clearWatcherEntries.description">
-            <de><![CDATA[Löscht aller Watcher Log-Einträge, die älter als X Tage sind.]]></de>
-            <en><![CDATA[Deletes all watcher log entries that are older than X days.]]></en>
+            <de><![CDATA[Löscht alle Watcher-Log-Einträge, die älter als X Tage sind.]]></de>
+            <en><![CDATA[Deletes all Watcher log entries that are older than X days.]]></en>
+            <es><![CDATA[Elimina todas las entradas del registro de Watcher con más de X días de antigüedad.]]></es>
+            <pt><![CDATA[Elimina todas as entradas do registo do Watcher com mais de X dias.]]></pt>
+            <fr><![CDATA[Supprime toutes les entrées du journal de Watcher datant de plus de X jours.]]></fr>
+            <it><![CDATA[Elimina tutte le voci del log di Watcher più vecchie di X giorni.]]></it>
+            <pl><![CDATA[Usuwa wszystkie wpisy dziennika Watcher starsze niż X dni.]]></pl>
         </locale>
         <locale name="cron.clearWatcherEntries.param.days">
             <de><![CDATA[älter als X Tage]]></de>
             <en><![CDATA[older than X days]]></en>
+            <es><![CDATA[Con más de X días de antigüedad]]></es>
+            <pt><![CDATA[Com mais de X dias]]></pt>
+            <fr><![CDATA[Datant de plus de X jours]]></fr>
+            <it><![CDATA[Più vecchie di X giorni]]></it>
+            <pl><![CDATA[Starsze niż X dni]]></pl>
         </locale>
         
         <locale name="package.title">
             <de><![CDATA[QUIQQER - Watcher]]></de>
             <en><![CDATA[QUIQQER - Watcher]]></en>
+            <es><![CDATA[QUIQQER - Watcher]]></es>
+            <pt><![CDATA[QUIQQER - Watcher]]></pt>
+            <fr><![CDATA[QUIQQER - Watcher]]></fr>
+            <it><![CDATA[QUIQQER - Watcher]]></it>
+            <pl><![CDATA[QUIQQER - Watcher]]></pl>
         </locale>
         <locale name="package.description">
             <de><![CDATA[
@@ -112,182 +206,396 @@
             The package provides a kind of logger.
             Actions for specific groups / users can be monitored and logged.
             ]]></en>
+            <es><![CDATA[Este paquete permite supervisar y registrar las acciones de determinados usuarios y grupos.]]></es>
+            <pt><![CDATA[Este pacote permite monitorizar e registar as ações de determinados utilizadores e grupos.]]></pt>
+            <fr><![CDATA[Ce paquet permet de surveiller et de journaliser les actions de certains utilisateurs et groupes.]]></fr>
+            <it><![CDATA[Questo pacchetto permette di monitorare e registrare le azioni di utenti e gruppi specifici.]]></it>
+            <pl><![CDATA[Pakiet umożliwia monitorowanie i rejestrowanie działań wybranych użytkowników i grup.]]></pl>
         </locale>
         <locale name="permission.quiqqer.watcher._header">
             <de><![CDATA[Watcher]]></de>
             <en><![CDATA[Watcher]]></en>
+            <es><![CDATA[Watcher]]></es>
+            <pt><![CDATA[Watcher]]></pt>
+            <fr><![CDATA[Watcher]]></fr>
+            <it><![CDATA[Watcher]]></it>
+            <pl><![CDATA[Watcher]]></pl>
         </locale>
         <locale name="permission.quiqqer.watcher.clearlog">
             <de><![CDATA[Darf Watcher-Protokolle leeren.]]></de>
             <en><![CDATA[Is allowed to clear the watcher log.]]></en>
+            <es><![CDATA[Puede vaciar los registros de Watcher.]]></es>
+            <pt><![CDATA[Pode limpar os registos do Watcher.]]></pt>
+            <fr><![CDATA[Peut vider les journaux de Watcher.]]></fr>
+            <it><![CDATA[Può svuotare i log di Watcher.]]></it>
+            <pl><![CDATA[Może czyścić dzienniki Watcher.]]></pl>
         </locale>
         <locale name="permission.quiqqer.watcher.readlog">
             <de><![CDATA[Darf Watcher-Protokolle lesen.]]></de>
             <en><![CDATA[Is allowed to read the watcher log.]]></en>
+            <es><![CDATA[Puede consultar y leer los registros de Watcher]]></es>
+            <pt><![CDATA[Pode consultar e ler os registos do Watcher]]></pt>
+            <fr><![CDATA[Peut consulter et lire les journaux de Watcher]]></fr>
+            <it><![CDATA[Può consultare e leggere i log di Watcher]]></it>
+            <pl><![CDATA[Może przeglądać i odczytywać dzienniki Watcher]]></pl>
         </locale>
 
         <locale name="exception.quiqqer.watcher.clearlog.error.wrongDateFormat">
-            <de><![CDATA[Watcher-Log konnte nicht geleert werden. Das Datumsformat ist nicht korrekt.]]></de>
-            <en><![CDATA[Wacther log could not be cleards. The date format is incorrect.]]></en>
+            <de><![CDATA[Das Watcher-Log konnte nicht geleert werden. Das Datumsformat ist nicht korrekt.]]></de>
+            <en><![CDATA[The Watcher log could not be cleared. The date format is incorrect.]]></en>
+            <es><![CDATA[No se ha podido vaciar el registro de Watcher. El formato de fecha no es válido.]]></es>
+            <pt><![CDATA[Não foi possível limpar o registo do Watcher. O formato da data é inválido.]]></pt>
+            <fr><![CDATA[Impossible de vider le journal de Watcher. Le format de la date est incorrect.]]></fr>
+            <it><![CDATA[Impossibile svuotare il log di Watcher. Il formato della data non è valido.]]></it>
+            <pl><![CDATA[Nie udało się wyczyścić dziennika Watcher. Format daty jest nieprawidłowy.]]></pl>
         </locale>
         <locale name="menu.watcher.text">
             <de><![CDATA[Watcher]]></de>
             <en><![CDATA[Watcher]]></en>
+            <es><![CDATA[Watcher]]></es>
+            <pt><![CDATA[Watcher]]></pt>
+            <fr><![CDATA[Watcher]]></fr>
+            <it><![CDATA[Watcher]]></it>
+            <pl><![CDATA[Watcher]]></pl>
         </locale>
         <locale name="settings.title">
             <de><![CDATA[Watcher]]></de>
             <en><![CDATA[Watcher]]></en>
+            <es><![CDATA[Watcher]]></es>
+            <pt><![CDATA[Watcher]]></pt>
+            <fr><![CDATA[Watcher]]></fr>
+            <it><![CDATA[Watcher]]></it>
+            <pl><![CDATA[Watcher]]></pl>
         </locale>
         <locale name="settings.category.title">
             <de><![CDATA[Einstellungen]]></de>
             <en><![CDATA[Settings]]></en>
+            <es><![CDATA[Configuración]]></es>
+            <pt><![CDATA[Definições]]></pt>
+            <fr><![CDATA[Paramètres]]></fr>
+            <it><![CDATA[Impostazioni]]></it>
+            <pl><![CDATA[Ustawienia]]></pl>
         </locale>
         <locale name="settings.users_and_groups.text">
             <de><![CDATA[Benutzer / Gruppen beobachten:]]></de>
             <en><![CDATA[Watch users / groups:]]></en>
+            <es><![CDATA[Usuarios y grupos que se supervisarán:]]></es>
+            <pt><![CDATA[Utilizadores e grupos a monitorizar:]]></pt>
+            <fr><![CDATA[Utilisateurs et groupes à surveiller :]]></fr>
+            <it><![CDATA[Utenti e gruppi da monitorare:]]></it>
+            <pl><![CDATA[Użytkownicy i grupy do monitorowania:]]></pl>
         </locale>
         <locale name="settings.users_and_groups.description">
-            <de>
-                <![CDATA[Setzen Sie die Benutzer und oder Gruppen für welche ein Ereignisprotokoll erstellt werden soll.]]></de>
-            <en><![CDATA[Put the users and or groups for which an event log is to be created.]]></en>
+            <de><![CDATA[Wählen Sie die Benutzer und/oder Gruppen aus, deren Aktionen protokolliert werden sollen.]]></de>
+            <en><![CDATA[Select the users and/or groups whose actions should be logged.]]></en>
+            <es><![CDATA[Selecciona los usuarios y/o grupos cuyas acciones se registrarán en el registro de eventos.]]></es>
+            <pt><![CDATA[Selecione os utilizadores e/ou grupos cujas ações serão registadas no registo de eventos.]]></pt>
+            <fr><![CDATA[Sélectionnez les utilisateurs et/ou les groupes dont les actions seront consignées dans le journal des événements.]]></fr>
+            <it><![CDATA[Seleziona gli utenti e/o i gruppi le cui azioni verranno registrate nel log degli eventi.]]></it>
+            <pl><![CDATA[Wybierz użytkowników i/lub grupy, których działania mają być zapisywane w dzienniku zdarzeń.]]></pl>
         </locale>
 
         <locale name="settings.logAjax.text">
-            <de><![CDATA[Ajax Request loggen]]></de>
-            <en><![CDATA[Log ajax requests]]></en>
+            <de><![CDATA[AJAX-Anfragen loggen]]></de>
+            <en><![CDATA[Log AJAX requests]]></en>
+            <es><![CDATA[Registrar solicitudes AJAX]]></es>
+            <pt><![CDATA[Registar pedidos AJAX]]></pt>
+            <fr><![CDATA[Journaliser les requêtes AJAX]]></fr>
+            <it><![CDATA[Registra le richieste AJAX]]></it>
+            <pl><![CDATA[Rejestruj żądania AJAX]]></pl>
         </locale>
         <locale name="settings.logEvents.text">
             <de><![CDATA[Events loggen]]></de>
             <en><![CDATA[Log events]]></en>
+            <es><![CDATA[Registrar eventos]]></es>
+            <pt><![CDATA[Registar eventos]]></pt>
+            <fr><![CDATA[Journaliser les événements]]></fr>
+            <it><![CDATA[Registra gli eventi]]></it>
+            <pl><![CDATA[Rejestruj zdarzenia]]></pl>
         </locale>
         <locale name="settings.logSystemUser.text">
             <de><![CDATA[Aktionen des Systembenutzers loggen]]></de>
             <en><![CDATA[Log system user actions]]></en>
+            <es><![CDATA[Registrar las acciones del usuario del sistema]]></es>
+            <pt><![CDATA[Registar as ações do utilizador do sistema]]></pt>
+            <fr><![CDATA[Journaliser les actions de l’utilisateur système]]></fr>
+            <it><![CDATA[Registra le azioni dell’utente di sistema]]></it>
+            <pl><![CDATA[Rejestruj działania użytkownika systemowego]]></pl>
         </locale>
         <locale name="settings.logSystemUser.description">
             <de><![CDATA[Kann sehr viele Protokolleinträge erzeugen und den Speicherbedarf erheblich erhöhen.]]></de>
             <en><![CDATA[Can create a large number of log entries and significantly increase storage usage.]]></en>
+            <es><![CDATA[Puede generar un gran número de entradas de registro y aumentar considerablemente el espacio de almacenamiento utilizado.]]></es>
+            <pt><![CDATA[Pode gerar um grande número de entradas de registo e aumentar significativamente o espaço de armazenamento utilizado.]]></pt>
+            <fr><![CDATA[Peut générer un grand nombre d’entrées de journal et augmenter considérablement l’espace de stockage utilisé.]]></fr>
+            <it><![CDATA[Può generare un numero elevato di voci di log e aumentare notevolmente lo spazio di archiviazione utilizzato.]]></it>
+            <pl><![CDATA[Może generować dużą liczbę wpisów dziennika i znacznie zwiększyć wykorzystanie przestrzeni dyskowej.]]></pl>
         </locale>
 
         <!-- messages -->
 
         <locale name="watcher.message.ajax">
-            <de><![CDATA[AJAX Aufruf]]></de>
+            <de><![CDATA[AJAX-Aufruf]]></de>
             <en><![CDATA[AJAX Call]]></en>
+            <es><![CDATA[Llamada AJAX]]></es>
+            <pt><![CDATA[Chamada AJAX]]></pt>
+            <fr><![CDATA[Appel AJAX]]></fr>
+            <it><![CDATA[Chiamata AJAX]]></it>
+            <pl><![CDATA[Wywołanie AJAX]]></pl>
         </locale>
         <locale name="watcher.message">
-            <de><![CDATA[Event Ausführung]]></de>
+            <de><![CDATA[Event-Ausführung]]></de>
             <en><![CDATA[Event Call]]></en>
+            <es><![CDATA[Ejecución de evento]]></es>
+            <pt><![CDATA[Execução de evento]]></pt>
+            <fr><![CDATA[Exécution d’un événement]]></fr>
+            <it><![CDATA[Esecuzione di un evento]]></it>
+            <pl><![CDATA[Wykonanie zdarzenia]]></pl>
         </locale>
 
         <locale name="watcher.message.userLogin">
             <de><![CDATA[Benutzer hat sich eingeloggt.]]></de>
             <en><![CDATA[User has logged in.]]></en>
+            <es><![CDATA[El usuario ha iniciado sesión.]]></es>
+            <pt><![CDATA[O utilizador iniciou sessão.]]></pt>
+            <fr><![CDATA[L’utilisateur s’est connecté.]]></fr>
+            <it><![CDATA[L’utente ha effettuato l’accesso.]]></it>
+            <pl><![CDATA[Użytkownik zalogował się.]]></pl>
         </locale>
 
         <locale name="watcher.message.userSave">
             <de><![CDATA[Benutzer ([uid]) gespeichert.]]></de>
             <en><![CDATA[User ([uid]) saved.]]></en>
+            <es><![CDATA[Usuario ([uid]) guardado.]]></es>
+            <pt><![CDATA[Utilizador ([uid]) guardado.]]></pt>
+            <fr><![CDATA[Utilisateur ([uid]) enregistré.]]></fr>
+            <it><![CDATA[Utente ([uid]) salvato.]]></it>
+            <pl><![CDATA[Zapisano użytkownika ([uid]).]]></pl>
         </locale>
         <locale name="watcher.message.userSetPassword">
-            <de><![CDATA[Benutzer ([uid]) Passwort gesetzt.]]></de>
-            <en><![CDATA[Set user ([uid]) password.]]></en>
+            <de><![CDATA[Passwort für Benutzer ([uid]) gesetzt.]]></de>
+            <en><![CDATA[Password set for user ([uid]).]]></en>
+            <es><![CDATA[Contraseña del usuario ([uid]) establecida.]]></es>
+            <pt><![CDATA[Palavra-passe do utilizador ([uid]) definida.]]></pt>
+            <fr><![CDATA[Mot de passe de l’utilisateur ([uid]) défini.]]></fr>
+            <it><![CDATA[Password dell’utente ([uid]) impostata.]]></it>
+            <pl><![CDATA[Ustawiono hasło użytkownika ([uid]).]]></pl>
         </locale>
         <locale name="watcher.message.userDisable">
-            <de><![CDATA[Benutzer deaktiviert (disable.)]]></de>
+            <de><![CDATA[Benutzer deaktiviert (disable).]]></de>
             <en><![CDATA[Deactivated user (disable).]]></en>
+            <es><![CDATA[Usuario desactivado (disable).]]></es>
+            <pt><![CDATA[Utilizador desativado (disable).]]></pt>
+            <fr><![CDATA[Utilisateur désactivé (disable).]]></fr>
+            <it><![CDATA[Utente disattivato (disable).]]></it>
+            <pl><![CDATA[Wyłączono użytkownika (disable).]]></pl>
         </locale>
         <locale name="watcher.message.userActivate">
             <de><![CDATA[Benutzer aktiviert ([uid]).]]></de>
             <en><![CDATA[Activated user ([uid]).]]></en>
+            <es><![CDATA[Usuario activado ([uid]).]]></es>
+            <pt><![CDATA[Utilizador ativado ([uid]).]]></pt>
+            <fr><![CDATA[Utilisateur activé ([uid]).]]></fr>
+            <it><![CDATA[Utente attivato ([uid]).]]></it>
+            <pl><![CDATA[Aktywowano użytkownika ([uid]).]]></pl>
         </locale>
         <locale name="watcher.message.userDeactivate">
             <de><![CDATA[Benutzer deaktiviert ([uid]).]]></de>
             <en><![CDATA[Deactivated user ([uid]).]]></en>
+            <es><![CDATA[Usuario desactivado ([uid]).]]></es>
+            <pt><![CDATA[Utilizador desativado ([uid]).]]></pt>
+            <fr><![CDATA[Utilisateur désactivé ([uid]).]]></fr>
+            <it><![CDATA[Utente disattivato ([uid]).]]></it>
+            <pl><![CDATA[Dezaktywowano użytkownika ([uid]).]]></pl>
         </locale>
         <locale name="watcher.message.userDelete">
             <de><![CDATA[Benutzer gelöscht ([uid]).]]></de>
-            <en><![CDATA[Delete user ([uid]).]]></en>
+            <en><![CDATA[User deleted ([uid]).]]></en>
+            <es><![CDATA[Usuario eliminado ([uid]).]]></es>
+            <pt><![CDATA[Utilizador eliminado ([uid]).]]></pt>
+            <fr><![CDATA[Utilisateur supprimé ([uid]).]]></fr>
+            <it><![CDATA[Utente eliminato ([uid]).]]></it>
+            <pl><![CDATA[Usunięto użytkownika ([uid]).]]></pl>
         </locale>
         <locale name="watcher.message.projectConfigSave">
-            <de><![CDATA[Projekt Konfiguration gespeichert ([project]).]]></de>
+            <de><![CDATA[Projektkonfiguration gespeichert ([project]).]]></de>
             <en><![CDATA[Saved project configuration ([project]).]]></en>
+            <es><![CDATA[Configuración del proyecto guardada ([project]).]]></es>
+            <pt><![CDATA[Configuração do projeto guardada ([project]).]]></pt>
+            <fr><![CDATA[Configuration du projet enregistrée ([project]).]]></fr>
+            <it><![CDATA[Configurazione del progetto salvata ([project]).]]></it>
+            <pl><![CDATA[Zapisano konfigurację projektu ([project]).]]></pl>
         </locale>
         <locale name="watcher.message.createProject">
             <de><![CDATA[Projekt erstellt ([project] [lang]).]]></de>
-            <en><![CDATA[Create project ([project] [lang]).]]></en>
+            <en><![CDATA[Project created ([project] [lang]).]]></en>
+            <es><![CDATA[Proyecto creado ([project] [lang]).]]></es>
+            <pt><![CDATA[Projeto criado ([project] [lang]).]]></pt>
+            <fr><![CDATA[Projet créé ([project] [lang]).]]></fr>
+            <it><![CDATA[Progetto creato ([project] [lang]).]]></it>
+            <pl><![CDATA[Utworzono projekt ([project] [lang]).]]></pl>
         </locale>
         <locale name="watcher.message.packageSetup">
-            <de><![CDATA[Paket setup ausgeführt ([package]).]]></de>
-            <en><![CDATA[Execute package setup ([package]).]]></en>
+            <de><![CDATA[Paket-Setup ausgeführt ([package]).]]></de>
+            <en><![CDATA[Package setup executed ([package]).]]></en>
+            <es><![CDATA[Configuración del paquete ejecutada ([package]).]]></es>
+            <pt><![CDATA[Configuração do pacote executada ([package]).]]></pt>
+            <fr><![CDATA[Configuration du paquet exécutée ([package]).]]></fr>
+            <it><![CDATA[Configurazione del pacchetto eseguita ([package]).]]></it>
+            <pl><![CDATA[Wykonano konfigurację pakietu ([package]).]]></pl>
         </locale>
         <locale name="watcher.message.packageInstall">
             <de><![CDATA[Paket installiert ([package]).]]></de>
             <en><![CDATA[Installed package ([package]).]]></en>
+            <es><![CDATA[Paquete instalado ([package]).]]></es>
+            <pt><![CDATA[Pacote instalado ([package]).]]></pt>
+            <fr><![CDATA[Paquet installé ([package]).]]></fr>
+            <it><![CDATA[Pacchetto installato ([package]).]]></it>
+            <pl><![CDATA[Zainstalowano pakiet ([package]).]]></pl>
         </locale>
         <locale name="watcher.message.packageUninstall">
             <de><![CDATA[Paket deinstalliert ([package]).]]></de>
             <en><![CDATA[Uninstalled package ([package]).]]></en>
+            <es><![CDATA[Paquete desinstalado ([package]).]]></es>
+            <pt><![CDATA[Pacote desinstalado ([package]).]]></pt>
+            <fr><![CDATA[Paquet désinstallé ([package]).]]></fr>
+            <it><![CDATA[Pacchetto disinstallato ([package]).]]></it>
+            <pl><![CDATA[Odinstalowano pakiet ([package]).]]></pl>
         </locale>
         <locale name="watcher.message.siteActivate">
             <de><![CDATA[Seite #[id] in Projekt [project] [lang] aktiviert.]]></de>
-            <en><![CDATA[Activate #[id] page from project [project] [lang].]]></en>
+            <en><![CDATA[Page #[id] in project [project] [lang] activated.]]></en>
+            <es><![CDATA[Página #[id] del proyecto [project] [lang] activada.]]></es>
+            <pt><![CDATA[Página #[id] do projeto [project] [lang] ativada.]]></pt>
+            <fr><![CDATA[Page #[id] du projet [project] [lang] activée.]]></fr>
+            <it><![CDATA[Pagina #[id] del progetto [project] [lang] attivata.]]></it>
+            <pl><![CDATA[Aktywowano stronę #[id] w projekcie [project] [lang].]]></pl>
         </locale>
         <locale name="watcher.message.siteDeactivate">
             <de><![CDATA[Seite #[id] in Projekt [project] [lang] deaktiviert.]]></de>
-            <en><![CDATA[Deactivate #[id] page from project [project] [lang].]]></en>
+            <en><![CDATA[Page #[id] in project [project] [lang] deactivated.]]></en>
+            <es><![CDATA[Página #[id] del proyecto [project] [lang] desactivada.]]></es>
+            <pt><![CDATA[Página #[id] do projeto [project] [lang] desativada.]]></pt>
+            <fr><![CDATA[Page #[id] du projet [project] [lang] désactivée.]]></fr>
+            <it><![CDATA[Pagina #[id] del progetto [project] [lang] disattivata.]]></it>
+            <pl><![CDATA[Dezaktywowano stronę #[id] w projekcie [project] [lang].]]></pl>
         </locale>
         <locale name="watcher.message.siteSave">
             <de><![CDATA[Seite #[id] in Projekt [project] [lang] gespeichert.]]></de>
             <en><![CDATA[Saved #[id] page from project [project] [lang].]]></en>
+            <es><![CDATA[Página #[id] del proyecto [project] [lang] guardada.]]></es>
+            <pt><![CDATA[Página #[id] do projeto [project] [lang] guardada.]]></pt>
+            <fr><![CDATA[Page #[id] du projet [project] [lang] enregistrée.]]></fr>
+            <it><![CDATA[Pagina #[id] del progetto [project] [lang] salvata.]]></it>
+            <pl><![CDATA[Zapisano stronę #[id] w projekcie [project] [lang].]]></pl>
         </locale>
         <locale name="watcher.message.siteDelete">
             <de><![CDATA[Seite #[id] in Projekt [project] [lang] gelöscht.]]></de>
             <en><![CDATA[Deleted #[id] page from project [project] [lang].]]></en>
+            <es><![CDATA[Página #[id] del proyecto [project] [lang] eliminada.]]></es>
+            <pt><![CDATA[Página #[id] do projeto [project] [lang] eliminada.]]></pt>
+            <fr><![CDATA[Page #[id] du projet [project] [lang] supprimée.]]></fr>
+            <it><![CDATA[Pagina #[id] del progetto [project] [lang] eliminata.]]></it>
+            <pl><![CDATA[Usunięto stronę #[id] w projekcie [project] [lang].]]></pl>
         </locale>
         <locale name="watcher.message.siteDestroy">
             <de><![CDATA[Seite #[id] in Projekt [project] [lang] zerstört.]]></de>
             <en><![CDATA[Destroyed #[id] page from project [project] [lang].]]></en>
+            <es><![CDATA[Página #[id] del proyecto [project] [lang] eliminada permanentemente.]]></es>
+            <pt><![CDATA[Página #[id] do projeto [project] [lang] eliminada permanentemente.]]></pt>
+            <fr><![CDATA[Page #[id] du projet [project] [lang] supprimée définitivement.]]></fr>
+            <it><![CDATA[Pagina #[id] del progetto [project] [lang] eliminata definitivamente.]]></it>
+            <pl><![CDATA[Trwale usunięto stronę #[id] w projekcie [project] [lang].]]></pl>
         </locale>
         <locale name="watcher.message.siteCreateChild">
-            <de><![CDATA[Seite #[id] in Projekt [project] [lang] erstellt.]]></de>
-            <en><![CDATA[Created #[id] page from project [project] [lang].]]></en>
+            <de><![CDATA[Unterseite von Seite #[id] in Projekt [project] [lang] erstellt.]]></de>
+            <en><![CDATA[Child page created under page #[id] in project [project] [lang].]]></en>
+            <es><![CDATA[Subpágina creada bajo la página #[id] del proyecto [project] [lang].]]></es>
+            <pt><![CDATA[Subpágina criada na página #[id] do projeto [project] [lang].]]></pt>
+            <fr><![CDATA[Sous-page créée sous la page #[id] du projet [project] [lang].]]></fr>
+            <it><![CDATA[Sottopagina creata nella pagina #[id] del progetto [project] [lang].]]></it>
+            <pl><![CDATA[Utworzono podstronę strony #[id] w projekcie [project] [lang].]]></pl>
         </locale>
         <locale name="watcher.message.siteMove">
             <de><![CDATA[Seite #[id] in Projekt [project] [lang] verschoben nach [parentId].]]></de>
             <en><![CDATA[Moved #[id] page from project [project] [lang] to [parentId].]]></en>
+            <es><![CDATA[Página #[id] del proyecto [project] [lang] movida bajo la página [parentId].]]></es>
+            <pt><![CDATA[Página #[id] do projeto [project] [lang] movida para a página [parentId].]]></pt>
+            <fr><![CDATA[Page #[id] du projet [project] [lang] déplacée sous la page [parentId].]]></fr>
+            <it><![CDATA[Pagina #[id] del progetto [project] [lang] spostata sotto la pagina [parentId].]]></it>
+            <pl><![CDATA[Przeniesiono stronę #[id] w projekcie [project] [lang] pod stronę [parentId].]]></pl>
         </locale>
         <locale name="watcher.message.mediaActivate">
-            <de><![CDATA[Seite #[id]  in Projekt [project] [lang] aktiviert.]]></de>
-            <en><![CDATA[Activated #[id] page from project [project] [lang].]]></en>
+            <de><![CDATA[Mediendatei #[id] in Projekt [project] [lang] aktiviert.]]></de>
+            <en><![CDATA[Media file #[id] in project [project] [lang] activated.]]></en>
+            <es><![CDATA[Archivo multimedia #[id] del proyecto [project] [lang] activado.]]></es>
+            <pt><![CDATA[Ficheiro multimédia #[id] do projeto [project] [lang] ativado.]]></pt>
+            <fr><![CDATA[Fichier multimédia #[id] du projet [project] [lang] activé.]]></fr>
+            <it><![CDATA[File multimediale #[id] del progetto [project] [lang] attivato.]]></it>
+            <pl><![CDATA[Aktywowano plik multimedialny #[id] w projekcie [project] [lang].]]></pl>
         </locale>
         <locale name="watcher.message.mediaDeactivate">
-            <de><![CDATA[Seite #[id]  in Projekt [project] [lang] deaktiviert.]]></de>
-            <en><![CDATA[Deactivated #[id] page from project [project] [lang].]]></en>
+            <de><![CDATA[Mediendatei #[id] in Projekt [project] [lang] deaktiviert.]]></de>
+            <en><![CDATA[Media file #[id] in project [project] [lang] deactivated.]]></en>
+            <es><![CDATA[Archivo multimedia #[id] del proyecto [project] [lang] desactivado.]]></es>
+            <pt><![CDATA[Ficheiro multimédia #[id] do projeto [project] [lang] desativado.]]></pt>
+            <fr><![CDATA[Fichier multimédia #[id] du projet [project] [lang] désactivé.]]></fr>
+            <it><![CDATA[File multimediale #[id] del progetto [project] [lang] disattivato.]]></it>
+            <pl><![CDATA[Dezaktywowano plik multimedialny #[id] w projekcie [project] [lang].]]></pl>
         </locale>
         <locale name="watcher.message.mediaSaveBegin">
-            <de><![CDATA[Media #[id] Datei gespeichert (mediaSaveBegin - [project]).]]></de>
-            <en><![CDATA[Saved #[id] media file (mediaSaveBegin - [project]).]]></en>
+            <de><![CDATA[Speichern der Mediendatei #[id] begonnen (mediaSaveBegin - [project]).]]></de>
+            <en><![CDATA[Started saving media file #[id] (mediaSaveBegin - [project]).]]></en>
+            <es><![CDATA[Se ha iniciado el guardado del archivo multimedia #[id] (mediaSaveBegin - [project]).]]></es>
+            <pt><![CDATA[Iniciada a gravação do ficheiro multimédia #[id] (mediaSaveBegin - [project]).]]></pt>
+            <fr><![CDATA[Début de l’enregistrement du fichier multimédia #[id] (mediaSaveBegin - [project]).]]></fr>
+            <it><![CDATA[Salvataggio del file multimediale #[id] avviato (mediaSaveBegin - [project]).]]></it>
+            <pl><![CDATA[Rozpoczęto zapisywanie pliku multimedialnego #[id] (mediaSaveBegin - [project]).]]></pl>
         </locale>
         <locale name="watcher.message.mediaSave">
-            <de><![CDATA[Media Datei #[id] gespeichert ([project]).]]></de>
+            <de><![CDATA[Mediendatei #[id] gespeichert ([project]).]]></de>
             <en><![CDATA[Saved #[id] media file ([project]).]]></en>
+            <es><![CDATA[Archivo multimedia #[id] guardado ([project]).]]></es>
+            <pt><![CDATA[Ficheiro multimédia #[id] guardado ([project]).]]></pt>
+            <fr><![CDATA[Fichier multimédia #[id] enregistré ([project]).]]></fr>
+            <it><![CDATA[File multimediale #[id] salvato ([project]).]]></it>
+            <pl><![CDATA[Zapisano plik multimedialny #[id] ([project]).]]></pl>
         </locale>
         <locale name="watcher.message.mediaDelete">
-            <de><![CDATA[Media Datei #[id] gelöscht ([project]).]]></de>
-            <en><![CDATA[Deleted #[id] media file([project]).]]></en>
+            <de><![CDATA[Mediendatei #[id] gelöscht ([project]).]]></de>
+            <en><![CDATA[Media file #[id] deleted ([project]).]]></en>
+            <es><![CDATA[Archivo multimedia #[id] eliminado ([project]).]]></es>
+            <pt><![CDATA[Ficheiro multimédia #[id] eliminado ([project]).]]></pt>
+            <fr><![CDATA[Fichier multimédia #[id] supprimé ([project]).]]></fr>
+            <it><![CDATA[File multimediale #[id] eliminato ([project]).]]></it>
+            <pl><![CDATA[Usunięto plik multimedialny #[id] ([project]).]]></pl>
         </locale>
         <locale name="watcher.message.mediaDeleteBegin">
-            <de><![CDATA[Media Datei #[id] gelöscht (mediaDeleteBegin - [project]).]]></de>
-            <en><![CDATA[Deleted #[id] media file (mediaDeleteBegin - [project]).]]></en>
+            <de><![CDATA[Löschen der Mediendatei #[id] begonnen (mediaDeleteBegin - [project]).]]></de>
+            <en><![CDATA[Started deleting media file #[id] (mediaDeleteBegin - [project]).]]></en>
+            <es><![CDATA[Se ha iniciado la eliminación del archivo multimedia #[id] (mediaDeleteBegin - [project]).]]></es>
+            <pt><![CDATA[Iniciada a eliminação do ficheiro multimédia #[id] (mediaDeleteBegin - [project]).]]></pt>
+            <fr><![CDATA[Début de la suppression du fichier multimédia #[id] (mediaDeleteBegin - [project]).]]></fr>
+            <it><![CDATA[Eliminazione del file multimediale #[id] avviata (mediaDeleteBegin - [project]).]]></it>
+            <pl><![CDATA[Rozpoczęto usuwanie pliku multimedialnego #[id] (mediaDeleteBegin - [project]).]]></pl>
         </locale>
         <locale name="watcher.message.mediaDestroy">
-            <de><![CDATA[Media Datei #[id] im Papierkorb gelöscht. (Datei zerstört - [project])]]></de>
+            <de><![CDATA[Mediendatei #[id] endgültig aus dem Papierkorb gelöscht ([project]).]]></de>
             <en><![CDATA[Deleted #[id] media file in the trash (File destroyed - [project]).]]></en>
+            <es><![CDATA[Archivo multimedia #[id] eliminado permanentemente de la papelera ([project]).]]></es>
+            <pt><![CDATA[Ficheiro multimédia #[id] eliminado permanentemente da reciclagem ([project]).]]></pt>
+            <fr><![CDATA[Fichier multimédia #[id] supprimé définitivement de la corbeille ([project]).]]></fr>
+            <it><![CDATA[File multimediale #[id] eliminato definitivamente dal cestino ([project]).]]></it>
+            <pl><![CDATA[Trwale usunięto plik multimedialny #[id] z kosza ([project]).]]></pl>
         </locale>
         <locale name="watcher.message.mediaRename">
-            <de><![CDATA[Media Datei #[id] umbenannt ([project]).]]></de>
+            <de><![CDATA[Mediendatei #[id] umbenannt ([project]).]]></de>
             <en><![CDATA[Renamed #[id] media file ([project]).]]></en>
+            <es><![CDATA[Archivo multimedia #[id] renombrado ([project]).]]></es>
+            <pt><![CDATA[Ficheiro multimédia #[id] renomeado ([project]).]]></pt>
+            <fr><![CDATA[Fichier multimédia #[id] renommé ([project]).]]></fr>
+            <it><![CDATA[File multimediale #[id] rinominato ([project]).]]></it>
+            <pl><![CDATA[Zmieniono nazwę pliku multimedialnego #[id] ([project]).]]></pl>
         </locale>
 
     </groups>
