@@ -94,22 +94,22 @@ define('package/quiqqer/watcher/bin/Panel', [
 
             this.$Grid = new Grid(Container, {
                 columnModel: [{
-                    header   : QUILocale.get('quiqqer/system', 'id'),
+                    header   : QUILocale.get('quiqqer/core', 'id'),
                     dataIndex: 'id',
                     dataType : 'number',
                     width    : 60
                 }, {
-                    header   : QUILocale.get('quiqqer/system', 'user_id'),
+                    header   : QUILocale.get('quiqqer/core', 'user_id'),
                     dataIndex: 'uid',
                     dataType : 'string',
                     width    : 100
                 }, {
-                    header   : QUILocale.get('quiqqer/system', 'username'),
+                    header   : QUILocale.get('quiqqer/core', 'username'),
                     dataIndex: 'username',
                     dataType : 'string',
                     width    : 100
                 }, {
-                    header   : QUILocale.get('quiqqer/system', 'date'),
+                    header   : QUILocale.get('quiqqer/core', 'date'),
                     dataIndex: 'statusTime',
                     dataType : 'date',
                     width    : 140
@@ -338,7 +338,7 @@ define('package/quiqqer/watcher/bin/Panel', [
                 icon       : 'fa fa-search',
                 closeButton: {
                     textimage: 'fa fa-remove',
-                    text     : QUILocale.get('quiqqer/system', 'cancel')
+                    text     : QUILocale.get('quiqqer/core', 'cancel')
                 },
                 events     : {
                     onOpen: function (Sheet) {
@@ -370,7 +370,7 @@ define('package/quiqqer/watcher/bin/Panel', [
             });
 
             Sheet.addButton({
-                text     : QUILocale.get('quiqqer/system', 'panel.clear.btn.execute'),
+                text     : QUILocale.get(lg, 'panel.clear.btn.execute'),
                 textimage: 'fa fa-eraser',
                 events   : {
                     onClick: function () {
